@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import AppProvider from "./context/AppProvider";
+import LeftArea from "./sections/LeftArea";
+import RightArea from "./sections/RightArea";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app">
+      <AppProvider>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "max-content auto",
+            width: "100%",
+            height: "100%",
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <LeftArea />
+          <RightArea />
+        </div>
+      </AppProvider>
     </div>
   );
 }

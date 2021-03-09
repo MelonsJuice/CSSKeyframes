@@ -1,0 +1,50 @@
+:root {
+  --timing-editor-height: 46.4em;
+}
+
+.timing-editor-container {
+  width: max-content;
+  height: var(--timing-editor-height);
+  padding: 2em;
+}
+
+.timing-editor {
+  display: grid;
+  grid-template-rows: max-content auto max-content;
+  padding: 0.8em;
+  height: 100%;
+  box-shadow: var(--shadow);
+  border-radius: 0.4em;
+  overflow: hidden;
+}
+
+.timing-editor-curve {
+  width: 32em;
+  margin: 0.8em 0;
+  overflow: hidden;
+}
+.timing-editor-curve > svg {
+  overflow: visible;
+  width: 20em;
+  height: 20em;
+}
+
+.timing-editor-coords-point {
+  display: flex;
+  flex-direction: row;
+}
+
+.timing-editor-coords-point-input {
+  padding: 0.32em;
+  font-weight: 700;
+  border-radius: 0.2em;
+  box-shadow: var(--hollow-shadow);
+}
+
+.timing-editor-frame {
+  width: 2.25em;
+  height: 2.25em;
+  font-weight: 700;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+}

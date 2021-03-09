@@ -1,0 +1,31 @@
+.select {
+  position: relative;
+  user-select: none;
+  border-radius: 0.66em;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.select-drop-menu {
+  position: absolute;
+  overflow: hidden;
+  z-index: 10;
+  background: linear-gradient(45deg, var(--color-lightblue), #fff);
+  border-radius: 0.66em;
+  box-shadow: 0 0.1em 0.2em var(--color-anakiwa);
+  transition: 0.4s cubic-bezier(0.06, 0.55, 0, 1);
+}
+
+.select-option {
+  justify-content: start;
+  padding: 0 0.8em;
+  font-size: 1.6em;
+  width: 10em;
+  height: 2.25em;
+  border-radius: 0.4em;
+  transition: 0.2s ease;
+}
+.select-option-menu:hover {
+  background: var(--color-anakiwa);
+  color: var(--color-dodge-blue);
+}

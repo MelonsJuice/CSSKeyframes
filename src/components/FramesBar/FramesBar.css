@@ -1,0 +1,25 @@
+.frames-bar {
+  display: grid;
+  grid-template-columns: max-content auto;
+  width: 100%;
+  padding: 0.8em;
+  background: crimson;
+}
+
+.frames-bar-bar {
+  display: block;
+  position: relative;
+  background: green;
+  width: 100%;
+  height: 3.6em;
+}
+
+.frames-bar-frame {
+  position: absolute;
+  width: 3.6em;
+  height: 3.6em;
+  user-select: none;
+  border-radius: 50%;
+  background: chocolate;
+  transform: translateX(-50%);
+}

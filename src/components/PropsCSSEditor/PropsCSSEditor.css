@@ -1,0 +1,13 @@
+.prop-css-editor {
+  display: grid;
+  grid-template-rows: max-content auto max-content;
+  padding: 0.8em;
+  height: 100%;
+}
+
+.prop-css-editor-values {
+  height: 100%;
+  padding: 0.8em;
+  border-radius: 0.6em;
+  overflow-y: scroll;
+}
