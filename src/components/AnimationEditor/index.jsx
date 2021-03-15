@@ -125,15 +125,39 @@ const AnimationEditor = () => {
           onChange={setValue}
           onBlur={checkValue}
           sibling={
-            <div>
+            <div
+              className="flex-center"
+              style={{
+                position: "relative",
+                width: "1.6em",
+                height: "1.6em",
+              }}
+            >
               <input
                 type="checkbox"
                 checked={animations[animationIndex].repeatDelay}
                 onChange={(e) =>
                   editAnimationParameter("repeatDelay", e.target.checked)
                 }
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  cursor: "pointer",
+                  opacity: "0",
+                  zIndex: "1",
+                }}
               />
-              <FontAwesomeIcon icon={faRedoAlt} />
+              <FontAwesomeIcon
+                icon={faRedoAlt}
+                style={{
+                  color: animations[animationIndex].repeatDelay
+                    ? "var(--color-purple)"
+                    : "var(--font-color)",
+                  opacity: animations[animationIndex].repeatDelay ? "1" : "0.4",
+                  transition: "0.2s ease",
+                }}
+              />
             </div>
           }
         />
@@ -145,15 +169,27 @@ const AnimationEditor = () => {
           onChange={setValue}
           onBlur={checkValue}
           sibling={
-            <div>
-              <FontAwesomeIcon icon={faInfinity} />
+            <div className="flex-row">
               <input
                 type="checkbox"
                 checked={animations[animationIndex].infinite}
                 onChange={(e) =>
                   editAnimationParameter("infinite", e.target.checked)
                 }
+                className="checkbox"
               />
+              &nbsp;&nbsp;&nbsp;
+              <FontAwesomeIcon
+                icon={faInfinity}
+                style={{
+                  color: animations[animationIndex].infinite
+                    ? "var(--color-purple)"
+                    : "var(--font-color)",
+                  opacity: animations[animationIndex].infinite ? "1" : "0.4",
+                  transition: "0.2s ease",
+                }}
+              />
+              &nbsp;&nbsp;
             </div>
           }
         />
@@ -179,20 +215,27 @@ const AnimationInput = ({
       className="flex-row space-big-double-row"
       style={{ width: "max-content" }}
     >
-      <label>{prop}</label>
+      <label style={{ fontWeight: "600", textTransform: "capitalize" }}>
+        {prop}
+      </label>
+      &nbsp;&nbsp;
       <div
         className="flex-row"
-        style={{ width: "max-content", background: "blue" }}
+        style={{
+          width: "max-content",
+          boxShadow: "var(--hollow-shadow)",
+          padding: "0.2em",
+          borderRadius: "0.4em",
+        }}
       >
-        {sibling}
         <input
           type="number"
           value={value}
           onChange={(e) => onChange(prop, e.target.value, [min, null])}
           onBlur={(e) => onBlur(prop, e.target.value)}
-          style={{ background: "grey", textAlign: "right" }}
         />
-        <span>{unit}</span>
+        <span style={{ fontWeight: "700" }}>{unit}</span>&nbsp;&nbsp;
+        {sibling}
       </div>
     </div>
   );

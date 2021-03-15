@@ -6,6 +6,7 @@ import "./Select.css";
 const Select = ({ value, options, callback, direction }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
+  const borderRadius = ["0.8em 0.8em 0 0", "0 0 0.8em 0.8em"];
 
   const handleClick = (e) => {
     setOpenMenu(false);
@@ -13,12 +14,17 @@ const Select = ({ value, options, callback, direction }) => {
   };
 
   useEffect(() => {
-    const height = openMenu ? options.length * 3.6 + "em" : "0em";
+    const height = openMenu ? options.length * 3.6 + "em" : "0";
     menuRef.current.style.height = height;
   }, [openMenu, options.length]);
 
   return (
-    <div className="select">
+    <div
+      className="select"
+      style={{
+        borderRadius: direction === "top" ? borderRadius[0] : borderRadius[1],
+      }}
+    >
       <article
         className="flex-center select-option"
         onClick={() => setOpenMenu(!openMenu)}
@@ -27,7 +33,15 @@ const Select = ({ value, options, callback, direction }) => {
           className="flex-row"
           style={{ fontSize: "1.2em", fontWeight: "700", width: "100%" }}
         >
-          {value}
+          <span
+            style={{
+              width: "6em",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {value}
+          </span>
           <span
             style={{
               transformOrigin: "center",
@@ -44,7 +58,10 @@ const Select = ({ value, options, callback, direction }) => {
       <section
         ref={menuRef}
         className="select-drop-menu"
-        style={{ [direction]: "4.4em" }}
+        style={{
+          [direction]: "3.6em",
+          borderRadius: direction === "top" ? borderRadius[1] : borderRadius[0],
+        }}
         onClick={handleClick}
       >
         {options.map((option, index) => {
@@ -54,7 +71,9 @@ const Select = ({ value, options, callback, direction }) => {
               data-index={index}
               className="flex-center select-option select-option-menu"
             >
-              <div style={{ fontSize: "1.2em" }}>{option}</div>
+              <div style={{ fontSize: "1.2em" }} data-index={index}>
+                {option}
+              </div>
             </article>
           );
         })}

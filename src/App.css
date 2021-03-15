@@ -2,21 +2,22 @@
 :root {
   /* FONT */
   --font-main: "Nunito Sans", sans-serif;
-  --font-color: #163055;
+  --font-color: #221655;
 
   /* COLORS */
-  --color-bg: #f0f5ff;
-  --color-dodge-blue: #0d77ff;
+  --color-bg: #f4f0ff;
   --color-purple: #420dff;
-  --color-lightblue: #e0eeff;
-  --color-anakiwa: #a4caff9a;
+  --color-purple-transparent: #410dff2d;
+  --color-violet: #a60dff;
   --gradient: linear-gradient(135deg, var(--color-lightblue), #fff);
 
-  --shadow: 0.1em 0.1em 0.2em var(--color-anakiwa), -0.1em -0.1em 0.2em #fff;
-  --hollow-shadow: inset 0.1em 0.1em 0.2em var(--color-anakiwa),
-    inset -0.1em -0.1em 0.2em #fff;
+  --shadow: 0.24em 0.24em 0.48em var(--color-purple-transparent),
+    -0.24em -0.24em 0.48em #fff;
+  --hollow-shadow: inset 0.1em 0.1em 0.18em var(--color-purple-transparent),
+    inset -0.1em -0.1em 0.18em #fff;
 
   /* SECTIONS */
+  --prop-timing-width: 36em;
 }
 
 /* GLOBAL TAGS STYLING */
@@ -25,7 +26,7 @@
   padding: 0;
   box-sizing: border-box;
   scrollbar-width: thin;
-  scrollbar-color: #16305550 transparent;
+  scrollbar-color: #dbd7e6 transparent;
 }
 
 *::-webkit-scrollbar {
@@ -38,7 +39,7 @@
   overflow: hidden;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #16305550;
+  background-color: #dbd7e6;
   border-radius: 0.4em;
 }
 
@@ -69,7 +70,23 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+  font-weight: 700;
+  text-align: right;
   width: 3.2em;
+}
+input[type="color"]::-moz-color-swatch {
+  border: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+input::placeholder {
+  color: var(--font-color);
+  opacity: 0.4;
 }
 
 ul {
@@ -96,35 +113,17 @@ ul {
 }
 
 .app-button {
-  width: 2.25em;
-  height: 2.25em;
   font-size: 1.6em;
-  border-radius: 0.32em;
+  cursor: pointer;
   transition: 0.2s ease;
 }
 .app-button:hover {
-  color: var(--color-dodge-blue);
+  color: var(--color-purple);
 }
-
-.app-input {
-  padding: 0.2em 0.4em;
-  font-weight: 700;
-  border-radius: 0.4em;
-  box-shadow: var(--hollow-shadow);
-}
-
-.custom-button {
-  /* background: var(--gradient); */
-  box-shadow: var(--shadow);
+.app-button-pressed {
+  font-size: 1.6em;
   cursor: pointer;
-}
-.custom-button:active {
-  background: none;
-  box-shadow: var(--hollow-shadow);
-}
-
-.gradient {
-  background: var(--gradient);
+  color: #fff;
 }
 
 /* spacing elements */
@@ -154,4 +153,90 @@ ul {
 }
 .space-big-double-col + .space-big-double-col {
   margin-top: 1.6em;
+}
+
+/* input range and checkbox */
+.slider {
+  -webkit-appearance: none;
+  width: 4.4em;
+  height: 1.6em;
+  padding: 0;
+  border-radius: 0;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.32em;
+  height: 1.85em;
+  border: none;
+  border-radius: 0.125em;
+  background: #fff;
+  box-shadow: 0 0 0.125em var(--color-purple);
+  cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 0.32em;
+  height: 1.85em;
+  border: none;
+  border-radius: 0.125em;
+  background: #fff;
+  box-shadow: 0 0 0.125em var(--color-purple);
+  cursor: pointer;
+}
+
+.checkbox {
+  position: relative;
+  width: 2em;
+  height: 1em;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  background: var(--color-purple-transparent);
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.checkbox:checked {
+  background: var(--color-purple);
+}
+.checkbox::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background: #fff;
+  box-shadow: 0 0 0.2em var(--color-purple-transparent);
+  transition: 0.2s ease;
+}
+.checkbox:checked:before {
+  left: 1em;
+}
+
+/*****************/
+/* MEDIA QUERIES */
+/*****************/
+@media screen and (max-width: 1600px) {
+  body {
+    font-size: 8px;
+  }
+}
+@media screen and (max-height: 720px) {
+  body {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  body {
+    font-size: 6px;
+  }
+}
+@media screen and (max-height: 578px) {
+  body {
+    font-size: 6px;
+  }
 }

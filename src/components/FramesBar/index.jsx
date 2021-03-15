@@ -1,4 +1,6 @@
-import React, { useContext, useRef } from "react";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useContext, useRef, useState } from "react";
 import {
   ADD_ANIMATION_FRAME,
   REMOVE_ANIMATION_FRAME,
@@ -12,7 +14,7 @@ import "./FramesBar.css";
 const FramesBar = () => {
   const { animations, animationIndex, dispatch } = useContext(AppContext);
   const canvasRef = useRef(null);
-  const mod = useRef("edit");
+  const [mod, setMod] = useState("edit");
   const buttons = useRef([]);
 
   var canvas, frame, offset, range, scale;
@@ -24,11 +26,11 @@ const FramesBar = () => {
 
     const [anime, index] = [animations, animationIndex];
     let valid = frame > 0 && frame < anime[index].frames.length - 1;
-    if (frame >= 0 && frame < anime[index].frames.length - 1)
+    if (frame >= 0 && frame < anime[index].frames.length)
       dispatch({ type: SET_FRAME, payload: frame });
 
     // switch different operation
-    switch (mod.current) {
+    switch (mod) {
       case "edit":
         if (!valid) return; // return if no valid frame has been selected
 
@@ -96,11 +98,13 @@ const FramesBar = () => {
     let toTurnOff = e.target === btns[0] ? 1 : 0;
     btns[toTurnOff].checked = false;
 
-    mod.current = !(btns[0].checked || btns[1].checked)
-      ? "edit"
-      : btns[0].checked
-      ? "add"
-      : "remove";
+    setMod(
+      !(btns[0].checked || btns[1].checked)
+        ? "edit"
+        : btns[0].checked
+        ? "add"
+        : "remove"
+    );
   };
 
   const addButtonRef = (e) => {
@@ -112,25 +116,52 @@ const FramesBar = () => {
       {/* buttons */}
       <article
         className="flex-row"
-        style={{ marginRight: "0.8em" }}
+        style={{ marginRight: "1.28em" }}
         onChange={handleChange}
       >
-        {["+", "-"].map((button) => {
+        {[
+          ["add", faPlus],
+          ["remove", faMinus],
+        ].map((button) => {
           return (
             <div
-              key={button}
-              className="space-big-row"
-              style={{ position: "relative" }}
+              key={button[0]}
+              className={
+                "flex-center space-big-row app-button" +
+                (mod === button[0] ? "-pressed" : "")
+              }
+              style={{
+                position: "relative",
+                width: "2.25em",
+                height: "2.25em",
+                borderRadius: "0.8em",
+              }}
             >
-              <div className="flex-center app-button">{button}</div>
+              <div
+                style={{
+                  position: "absolute",
+                  display: "block",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "0.8em",
+                  background: "var(--color-purple)",
+                  transformOrigin: "center",
+                  transform: "scale(" + (mod === button[0] ? "1" : "0") + ")",
+                  transition: "0.2s cubic-bezier(0.06, 0.55, 0.2, 1)",
+                  zIndex: "-1",
+                }}
+              ></div>
+              <FontAwesomeIcon icon={button[1]} />
               <input
                 ref={addButtonRef}
                 type="checkbox"
                 style={{
                   position: "absolute",
                   top: "0",
+                  opacity: "0",
                   width: "100%",
                   height: "100%",
+                  cursor: "pointer",
                 }}
               />
             </div>
@@ -149,7 +180,7 @@ const FramesBar = () => {
                 style={{ left: frame * 100 + "%" }}
                 data-frame={index}
               >
-                {index + 1}
+                <h2 data-frame={index}>{index + 1}</h2>
               </span>
             );
           })}

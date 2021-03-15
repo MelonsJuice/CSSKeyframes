@@ -1,0 +1,37 @@
+.animation-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#dummy {
+  position: absolute;
+  display: block;
+  width: 16em;
+  height: 16em;
+  border: 3.2px solid var(--font-color);
+  border-radius: 1.6em;
+  background: var(--color-violet);
+  transform-origin: center;
+}
+
+.animation-preview-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: flex-end;
+  width: 100%;
+  font-size: 1.6em;
+  height: 2em;
+}
+
+.send-button {
+  width: 1.6em;
+  height: 1.6em;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.send-button:hover {
+  color: var(--color-purple);
+}

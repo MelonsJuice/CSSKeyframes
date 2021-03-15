@@ -4,17 +4,16 @@ import {
   faMinus,
   faEdit,
   faBars,
+  faProjectDiagram,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
 import {
   ADD_PROP_CSS,
-  CHANGE_ANIMATION,
   EDIT_PROP_CSS,
   REMOVE_PROP_CSS,
 } from "../../context/actions";
 import AppContext from "../../context/AppContext";
-import Select from "../Select";
 import "./PropsCSSList.css";
 import { propsList } from "./propsList";
 
@@ -69,7 +68,7 @@ const PropsCSSList = () => {
 // CURRENT CSS PROPS LIST //
 ////////////////////////////
 const PropsCSSListCurrent = () => {
-  const { propsCSSList, animations, dispatch } = useContext(AppContext);
+  const { propsCSSList, dispatch } = useContext(AppContext);
   const handleClick = (action, group, prop) => {
     action &&
       dispatch({
@@ -87,29 +86,26 @@ const PropsCSSListCurrent = () => {
         return propsCSSList[prop].father ? (
           <div key={prop} style={{ display: "block" }}>
             <div className="flex-row props-css-list-current">
-              <h2>{prop}</h2>
-              <div className="flex-row" style={{ fontSize: "0.8em" }}>
-                <Select
-                  value={animations[propsCSSList[prop].animationIndex].name}
-                  options={animations.map((animation) => animation.name)}
-                  direction="top"
-                  callback={(value, index) => {
-                    dispatch({
-                      type: CHANGE_ANIMATION,
-                      payload: {
-                        index: index,
-                        prop: prop,
-                      },
-                    });
-                  }}
-                />
-              </div>
+              <h2 style={{ color: "var(--color-purple)" }}>{prop}</h2>
             </div>
             {Object.keys(propsCSSList[prop].children).map((child) => {
               return (
                 <div key={child} className="flex-row props-css-list-current">
-                  <h2>{child}</h2>
-                  <div className="flex-row" style={{ fontSize: "0.8em" }}>
+                  <div className="flex-row">
+                    <FontAwesomeIcon
+                      icon={faProjectDiagram}
+                      style={{
+                        fontSize: "0.8em",
+                        marginRight: "0.72em",
+                        color: "var(--color-purple)",
+                      }}
+                    />
+                    <h2>{child}</h2>
+                  </div>
+                  <div
+                    className="flex-row"
+                    style={{ fontSize: "0.8em", marginRight: "0.8em" }}
+                  >
                     {[
                       ["remove", faMinus],
                       ["edit", faEdit],
@@ -117,7 +113,7 @@ const PropsCSSListCurrent = () => {
                       return (
                         <button
                           key={btn[0]}
-                          className="flex-center app-button space-mid-row custom-button"
+                          className="flex-center app-button space-big-row"
                           onClick={() => handleClick(btn[0], prop, child)}
                         >
                           <FontAwesomeIcon icon={btn[1]} />
@@ -132,7 +128,10 @@ const PropsCSSListCurrent = () => {
         ) : (
           <div key={prop} className="flex-row props-css-list-current">
             <h2>{prop}</h2>
-            <div className="flex-row" style={{ fontSize: "0.8em" }}>
+            <div
+              className="flex-row"
+              style={{ fontSize: "0.8em", marginRight: "0.8em" }}
+            >
               {[
                 ["remove", faMinus],
                 ["edit", faEdit],
@@ -140,29 +139,13 @@ const PropsCSSListCurrent = () => {
                 return (
                   <button
                     key={btn[0]}
-                    className="flex-center app-button space-mid-row custom-button"
+                    className="flex-center app-button space-big-row custom-button"
                     onClick={() => handleClick(btn[0], false, prop)}
                   >
                     <FontAwesomeIcon icon={btn[1]} />
                   </button>
                 );
               })}
-              <div style={{ marginLeft: "0.6em" }}>
-                <Select
-                  value={animations[propsCSSList[prop].animationIndex].name}
-                  options={animations.map((animation) => animation.name)}
-                  direction="top"
-                  callback={(value, index) => {
-                    dispatch({
-                      type: CHANGE_ANIMATION,
-                      payload: {
-                        index: index,
-                        prop: prop,
-                      },
-                    });
-                  }}
-                />
-              </div>
             </div>
           </div>
         );
@@ -181,13 +164,14 @@ const PropsCSSListAll = () => {
     prop = prop === "false" ? false : prop;
     if (!(prop && category)) return;
 
-    let { range, type, group } = propsList[category][catindex];
+    let { range, type, group, unit } = propsList[category][catindex];
     dispatch({
       type: ADD_PROP_CSS,
       payload: {
         name: prop,
         group: group || false,
         type: type,
+        unit: unit || "",
         range: range || [null, null],
         index: 0,
       },

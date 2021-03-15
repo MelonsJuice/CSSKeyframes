@@ -1,8 +1,8 @@
 .select {
   position: relative;
   user-select: none;
-  border-radius: 0.66em;
-  box-shadow: var(--shadow);
+  background: var(--color-purple);
+  color: #fff;
   cursor: pointer;
 }
 
@@ -10,10 +10,9 @@
   position: absolute;
   overflow: hidden;
   z-index: 10;
-  background: linear-gradient(45deg, var(--color-lightblue), #fff);
-  border-radius: 0.66em;
-  box-shadow: 0 0.1em 0.2em var(--color-anakiwa);
-  transition: 0.4s cubic-bezier(0.06, 0.55, 0, 1);
+  background: var(--color-purple);
+  box-shadow: 0 0.2em 0.4em var(--font-color);
+  transition: 0.4s cubic-bezier(0.06, 0.55, 0.2, 1);
 }
 
 .select-option {
@@ -22,10 +21,10 @@
   font-size: 1.6em;
   width: 10em;
   height: 2.25em;
-  border-radius: 0.4em;
   transition: 0.2s ease;
+  color: #fff;
 }
 .select-option-menu:hover {
-  background: var(--color-anakiwa);
-  color: var(--color-dodge-blue);
+  background: #fff;
+  color: var(--color-purple);
 }

@@ -11,11 +11,14 @@ const LeftArea = () => {
         style={{
           display: "grid",
           gridTemplateRows:
-            "calc(100vh - var(--timing-editor-height)) max-content",
+            "calc(100vh - var(--timing-editor-height) - 3.2em) max-content",
           height: "100vh",
+          paddingBottom: "3.2em",
         }}
       >
-        <PropsCSSEditor />
+        <div style={{ padding: "3.2em 0" }}>
+          <PropsCSSEditor />
+        </div>
         <TimingEditor />
       </div>
     </div>

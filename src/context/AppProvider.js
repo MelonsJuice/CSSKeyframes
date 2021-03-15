@@ -29,12 +29,14 @@ import {
   SET_ANIMATION,
   CHANGE_ANIMATION,
   TRANSFORM_PROP_CSS,
+  CHANGE_ANIMATION_NAME,
+  SET_PROP_CSS_UNIT,
 } from "./actions.js";
 import AppContext from "./AppContext.js";
 
-const createAnimation = (index) => {
+const createAnimation = (name) => {
   return {
-    name: "anime-" + index,
+    name: name,
     duration: 1,
     delay: 0,
     repeat: 1,
@@ -46,10 +48,11 @@ const createAnimation = (index) => {
   };
 };
 
-const createPropCSS = (group, type, range, frames, animeIndex) => {
+const createPropCSS = (group, type, unit, range, frames, animeIndex) => {
   const values = frames.map((frame) => {
-    return type === "number" ? roundFloat(frame) : [255, 0, 0, 1];
+    return type === "number" ? roundFloat(frame) : [66, 13, 255, 1];
   });
+  let currentUnit = unit && unit === "multiple" ? "px" : unit;
 
   // group prop: properties that share the same animation
   // example: transform: (translate, scale, ecc...)
@@ -59,6 +62,8 @@ const createPropCSS = (group, type, range, frames, animeIndex) => {
         type: type,
         values: values,
         range: range,
+        unitDomain: unit,
+        unit: currentUnit,
       }
     : {
         father: false,
@@ -66,18 +71,34 @@ const createPropCSS = (group, type, range, frames, animeIndex) => {
         type: type,
         values: values,
         range: range,
+        unitDomain: unit,
+        unit: currentUnit,
         animationIndex: animeIndex,
       };
 };
 
 const initState = {
+  animationName: "anime",
   frame: 0,
-  propCSSGroup: false,
-  propCSS: "opacity",
+  propCSSGroup: "transform",
+  propCSS: "translateY",
   animationIndex: 0,
-  animations: [createAnimation(0)],
+  animations: [createAnimation("anime-0")],
   propsCSSList: {
-    opacity: createPropCSS(false, "number", [0, 1], [0, 1], 0),
+    transform: {
+      animationIndex: 0,
+      father: true,
+      children: {
+        translateY: createPropCSS(
+          "transform",
+          "number",
+          "multiple",
+          [null, null],
+          [0, 1],
+          0
+        ),
+      },
+    },
   },
 };
 
@@ -103,7 +124,7 @@ const reducer = (state, action) => {
 
     case ADD_PROP_CSS: {
       let copy = JSON.parse(JSON.stringify(state));
-      let { name, group, type, range, index } = action.payload;
+      let { name, group, type, unit, range, index } = action.payload;
 
       // create css prop group (one animation for alll props of the group)
       if (group) {
@@ -112,9 +133,10 @@ const reducer = (state, action) => {
             (copy.propsCSSList[group].children[name] = createPropCSS(
               group,
               type,
+              unit,
               range,
-              copy.animations[index].frames,
-              index
+              copy.animations[copy.propsCSSList[group].animationIndex].frames,
+              copy.propsCSSList[group].animationIndex
             ))
           : (copy.propsCSSList[group] = {
               animationIndex: index,
@@ -123,6 +145,7 @@ const reducer = (state, action) => {
                 [name]: createPropCSS(
                   group,
                   type,
+                  unit,
                   range,
                   copy.animations[index].frames,
                   index
@@ -134,6 +157,7 @@ const reducer = (state, action) => {
         copy.propsCSSList[name] = createPropCSS(
           group,
           type,
+          unit,
           range,
           copy.animations[index].frames,
           index
@@ -176,7 +200,7 @@ const reducer = (state, action) => {
         frame: 0,
         animationIndex: state.propsCSSList[prop].animationIndex,
         propCSS: action.payload.prop,
-        propCSSGroup: action.payload.group || false,
+        propCSSGroup: action.payload.group,
       };
     }
 
@@ -315,7 +339,10 @@ const reducer = (state, action) => {
         propCSSGroup: false,
         propCSS: undefined,
         animationIndex: state.animations.length,
-        animations: [...state.animations, createAnimation(action.payload)],
+        animations: [
+          ...state.animations,
+          createAnimation(state.animationName + "-" + action.payload),
+        ],
       };
     }
 
@@ -352,6 +379,7 @@ const reducer = (state, action) => {
       }
 
       return {
+        animationName: state.animationName,
         frame: 0,
         propCSSGroup: false,
         propCSS: undefined,
@@ -364,6 +392,7 @@ const reducer = (state, action) => {
     case SET_ANIMATION: {
       return {
         ...state,
+        frame: 0,
         animationIndex: action.payload,
         propCSSGroup: false,
         propCSS: undefined,
@@ -393,6 +422,7 @@ const reducer = (state, action) => {
       }
       return {
         ...state,
+        frame: 0,
         propCSSGroup: group ? prop : false,
         propCSS: keys[0],
         propsCSSList: copyProps,
@@ -401,13 +431,33 @@ const reducer = (state, action) => {
     }
 
     case TRANSFORM_PROP_CSS: {
-      let { group, prop, offset, scale } = action.payload;
+      let { group, prop, offset, scale, reverse } = action.payload;
       let copyProps = JSON.parse(JSON.stringify(state.propsCSSList));
       let p = group ? copyProps[group].children[prop] : copyProps[prop];
 
-      p.values = p.values.map((v) => {
-        return setInRange(v * scale + offset, p.range);
-      });
+      if (p.type === "number")
+        p.values = p.values.map((v) => {
+          return roundFloat(setInRange(v * scale + offset, p.range));
+        });
+      reverse && p.values.reverse();
+      return { ...state, propsCSSList: copyProps };
+    }
+
+    case CHANGE_ANIMATION_NAME: {
+      let copyAnime = JSON.parse(JSON.stringify(state.animations));
+      let name = action.payload;
+
+      for (let anime of copyAnime)
+        anime.name = anime.name.replace(state.animationName, name);
+      return { ...state, animationName: name, animations: copyAnime };
+    }
+
+    case SET_PROP_CSS_UNIT: {
+      let { prop, group, unit } = action.payload;
+      let copyProps = JSON.parse(JSON.stringify(state.propsCSSList));
+      let cprop = group ? copyProps[group].children[prop] : copyProps[prop];
+
+      cprop.unit = unit;
       return { ...state, propsCSSList: copyProps };
     }
 

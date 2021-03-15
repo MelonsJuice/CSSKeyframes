@@ -1,26 +1,22 @@
 :root {
-  --timing-editor-height: 46.4em;
-}
-
-.timing-editor-container {
-  width: max-content;
-  height: var(--timing-editor-height);
-  padding: 2em;
+  --timing-editor-height: 46em;
 }
 
 .timing-editor {
-  display: grid;
-  grid-template-rows: max-content auto max-content;
-  padding: 0.8em;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--prop-timing-width);
+  height: var(--timing-editor-height);
   box-shadow: var(--shadow);
-  border-radius: 0.4em;
+  border-radius: 1.6em;
+  padding: 1.6em;
   overflow: hidden;
 }
 
 .timing-editor-curve {
-  width: 32em;
-  margin: 0.8em 0;
+  height: 100%;
+  margin: 1.6em 0;
   overflow: hidden;
 }
 .timing-editor-curve > svg {
@@ -29,15 +25,13 @@
   height: 20em;
 }
 
-.timing-editor-coords-point {
+.timing-editor-coords-point-input {
   display: flex;
   flex-direction: row;
-}
-
-.timing-editor-coords-point-input {
+  align-items: center;
   padding: 0.32em;
   font-weight: 700;
-  border-radius: 0.2em;
+  border-radius: 0.4em;
   box-shadow: var(--hollow-shadow);
 }
 

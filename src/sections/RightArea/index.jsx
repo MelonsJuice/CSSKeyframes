@@ -1,5 +1,6 @@
 import React from "react";
 import AnimationEditor from "../../components/AnimationEditor";
+import AnimationPreview from "../../components/AnimationPreview";
 import FramesBar from "../../components/FramesBar";
 
 const RightArea = () => {
@@ -9,9 +10,12 @@ const RightArea = () => {
         display: "grid",
         gridTemplateRows: "auto max-content",
         height: "100vh",
+        padding: "3.2em",
       }}
     >
-      <article className="flex-center">preview</article>
+      <article className="flex-center">
+        <AnimationPreview />
+      </article>
       <article>
         <AnimationEditor />
         <FramesBar />
