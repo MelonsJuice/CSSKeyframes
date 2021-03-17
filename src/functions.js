@@ -18,5 +18,6 @@ export {
   EASEINOUT,
   BEZIER,
   getTiming,
+  getStringTiming,
 } from "./functions/timing";
 export { hexToRgb, rgbToHex, getColorAtSplit } from "./functions/color";

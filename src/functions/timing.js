@@ -22,3 +22,13 @@ export function getTiming(timing) {
       return { curve: LINEAR, clt: [0, 0], crt: [1, 1] };
   }
 }
+
+export function getStringTiming(timingObject) {
+  return timingObject.curve === BEZIER
+    ? "cubic-bezier(" +
+        timingObject.clt.join(", ") +
+        ", " +
+        timingObject.crt.join(", ") +
+        ")"
+    : timingObject.curve;
+}

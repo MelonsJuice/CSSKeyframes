@@ -10,7 +10,7 @@ const Select = ({ value, options, callback, direction }) => {
 
   const handleClick = (e) => {
     setOpenMenu(false);
-    callback(e.target.textContent, e.target.dataset.index);
+    callback(e.target.textContent, parseInt(e.target.dataset.index));
   };
 
   useEffect(() => {

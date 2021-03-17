@@ -44,7 +44,7 @@ const AnimationEditor = () => {
         payload: {
           parameter: parameter,
           index: animationIndex,
-          value: value,
+          value: parseFloat(value),
         },
       });
   };

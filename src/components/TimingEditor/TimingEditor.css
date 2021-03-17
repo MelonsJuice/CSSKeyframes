@@ -37,8 +37,9 @@
 
 .timing-editor-frame {
   width: 2.25em;
-  height: 2.25em;
+  height: 3.6em;
+  color: var(--color-purple);
   font-weight: 700;
-  border-radius: 50%;
+  border-radius: 0.4em;
   box-shadow: var(--shadow);
 }

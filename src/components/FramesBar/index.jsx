@@ -113,10 +113,36 @@ const FramesBar = () => {
 
   return (
     <section className="frames-bar">
+      {/* frames bar */}
+      <article style={{ padding: "0 1em" }} onMouseDown={handleMoveFrame}>
+        <div ref={canvasRef} className="frames-bar-bar">
+          <div className="flex-center frames-bar-frame-preview"></div>
+          {animations[animationIndex].frames.map((frame, index) => {
+            return (
+              <div
+                key={index}
+                className="frames-bar-frame-container"
+                style={{ left: frame * 100 + "%" }}
+              >
+                <span
+                  className="flex-center frames-bar-frame"
+                  data-frame={index}
+                >
+                  <h2 data-frame={index}>{index + 1}</h2>
+                </span>
+                <span className="flex-center frames-bar-frame-baloon">
+                  <h2>{(frame * 100).toFixed(0) + "%"}</h2>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </article>
+
       {/* buttons */}
       <article
         className="flex-row"
-        style={{ marginRight: "1.28em" }}
+        style={{ marginLeft: "0.8em" }}
         onChange={handleChange}
       >
         {[
@@ -127,7 +153,7 @@ const FramesBar = () => {
             <div
               key={button[0]}
               className={
-                "flex-center space-big-row app-button" +
+                "flex-center space-mid-row app-button" +
                 (mod === button[0] ? "-pressed" : "")
               }
               style={{
@@ -167,24 +193,6 @@ const FramesBar = () => {
             </div>
           );
         })}
-      </article>
-
-      {/* frames bar */}
-      <article style={{ padding: "0 1.8em" }} onMouseDown={handleMoveFrame}>
-        <div ref={canvasRef} className="frames-bar-bar">
-          {animations[animationIndex].frames.map((frame, index) => {
-            return (
-              <span
-                key={index}
-                className="flex-center frames-bar-frame"
-                style={{ left: frame * 100 + "%" }}
-                data-frame={index}
-              >
-                <h2 data-frame={index}>{index + 1}</h2>
-              </span>
-            );
-          })}
-        </div>
       </article>
     </section>
   );

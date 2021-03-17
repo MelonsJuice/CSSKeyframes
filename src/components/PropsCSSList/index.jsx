@@ -158,7 +158,7 @@ const PropsCSSListCurrent = () => {
 // AVAILABLE CSS PROPS LIST //
 //////////////////////////////
 const PropsCSSListAll = () => {
-  const { propsCSSList, dispatch } = useContext(AppContext);
+  const { animationIndex, propsCSSList, dispatch } = useContext(AppContext);
   const handleClick = (e) => {
     let { prop, category, catindex } = e.target.dataset;
     prop = prop === "false" ? false : prop;
@@ -173,7 +173,7 @@ const PropsCSSListAll = () => {
         type: type,
         unit: unit || "",
         range: range || [null, null],
-        index: 0,
+        index: animationIndex,
       },
     });
   };

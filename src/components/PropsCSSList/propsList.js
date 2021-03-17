@@ -41,18 +41,25 @@ export const propsList = {
       unit: "deg",
     },
     {
+      name: "rotateZ",
+      range: [null, null],
+      type: "number",
+      group: "transform",
+      unit: "deg",
+    },
+    {
       name: "skewX",
       range: [null, null],
       type: "number",
       group: "transform",
-      unit: "multiple",
+      unit: "deg",
     },
     {
       name: "skewY",
       range: [null, null],
       type: "number",
       group: "transform",
-      unit: "multiple",
+      unit: "deg",
     },
   ],
 
@@ -124,6 +131,29 @@ export const propsList = {
     },
   ],
 
+  Padding: [
+    { name: "padding", range: [0, null], type: "number", unit: "multiple" },
+    { name: "padding-top", range: [0, null], type: "number", unit: "multiple" },
+    {
+      name: "padding-right",
+      range: [0, null],
+      type: "number",
+      unit: "multiple",
+    },
+    {
+      name: "padding-bottom",
+      range: [0, null],
+      type: "number",
+      unit: "multiple",
+    },
+    {
+      name: "padding-left",
+      range: [0, null],
+      type: "number",
+      unit: "multiple",
+    },
+  ],
+
   Size: [
     { name: "width", range: [0, null], type: "number", unit: "multiple" },
     { name: "min-width", range: [0, null], type: "number", unit: "multiple" },
@@ -141,6 +171,11 @@ export const propsList = {
   ],
 
   Appearance: [{ name: "opacity", range: [0, 1], type: "number" }],
+
+  Background: [
+    { name: "background-color", type: "color" },
+    // {name: "background-position", range: [null, null], type: ["number", "number"], unit: "multiple"}, WIP
+  ],
 
   Text: [
     { name: "font-size", range: [0, null], type: "number", unit: "multiple" },

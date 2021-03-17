@@ -111,15 +111,19 @@ const TimingEditor = () => {
 
   return (
     <section className="timing-editor">
-      <div className="flex-row" style={{ padding: "0 2.4em" }}>
-        <h3 className="flex-center timing-editor-frame">{cFrame + 1}</h3>
+      <div className="flex-row" style={{ padding: "0 4em" }}>
+        <div className="flex-center timing-editor-frame">
+          <h2>{cFrame + 1}</h2>
+        </div>
         <Select
           value={animations[animationIndex].timing[cFrame].curve}
           options={[LINEAR, EASE, EASEIN, EASEOUT, EASEINOUT, BEZIER]}
           direction="top"
           callback={setTiming}
         />
-        <h3 className="flex-center timing-editor-frame">{cFrame + 2}</h3>
+        <div className="flex-center timing-editor-frame">
+          <h2>{cFrame + 2}</h2>
+        </div>
       </div>
       <article className="flex-center timing-editor-curve">
         <svg ref={canvasRef} viewBox="0 0 1 1" onMouseDown={handleMovePoint}>

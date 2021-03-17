@@ -9,10 +9,11 @@
   display: block;
   width: 16em;
   height: 16em;
-  border: 3.2px solid var(--font-color);
+  border: 3.2px solid transparent;
   border-radius: 1.6em;
   background: var(--color-violet);
   transform-origin: center;
+  transition: 0.4s ease;
 }
 
 .animation-preview-nav {

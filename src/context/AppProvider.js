@@ -82,6 +82,7 @@ const initState = {
   frame: 0,
   propCSSGroup: "transform",
   propCSS: "translateY",
+  propCSSCounter: 1,
   animationIndex: 0,
   animations: [createAnimation("anime-0")],
   propsCSSList: {
@@ -125,6 +126,7 @@ const reducer = (state, action) => {
     case ADD_PROP_CSS: {
       let copy = JSON.parse(JSON.stringify(state));
       let { name, group, type, unit, range, index } = action.payload;
+      copy.propCSSCounter += 1;
 
       // create css prop group (one animation for alll props of the group)
       if (group) {
@@ -190,6 +192,7 @@ const reducer = (state, action) => {
         propsCSSList: filter,
         propCSS: undefined,
         propCSSGroup: false,
+        propCSSCounter: state.propCSSCounter - 1,
       };
     }
 
@@ -383,6 +386,7 @@ const reducer = (state, action) => {
         frame: 0,
         propCSSGroup: false,
         propCSS: undefined,
+        propCSSCounter: state.propCSSCounter,
         animationIndex: 0,
         animations: copyAnime,
         propsCSSList: copyProps,
@@ -411,13 +415,12 @@ const reducer = (state, action) => {
       const frames = state.animations[index].frames;
       for (let key of keys) {
         let values = deepProp[key].values;
-        let pprop = deepProp[key];
         let diff = frames.length - values.length;
 
         if (diff >= 0) {
           let newValue = values[values.length - 1];
           for (let i = values.length; i < frames.length; i++)
-            values.push(pprop.type === "color" ? "" : newValue);
+            values.push(newValue);
         } else values.splice(frames.length);
       }
       return {
