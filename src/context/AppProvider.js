@@ -31,6 +31,7 @@ import {
   TRANSFORM_PROP_CSS,
   CHANGE_ANIMATION_NAME,
   SET_PROP_CSS_UNIT,
+  SAVE_CHANGES,
 } from "./actions.js";
 import AppContext from "./AppContext.js";
 
@@ -42,7 +43,8 @@ const createAnimation = (name) => {
     repeat: 1,
     infinite: false,
     repeatDelay: false,
-    forwards: "none",
+    fillMode: "forwards",
+    direction: "normal",
     frames: [0, 1],
     timing: [getTiming(EASE)],
   };
@@ -79,6 +81,7 @@ const createPropCSS = (group, type, unit, range, frames, animeIndex) => {
 
 const initState = {
   animationName: "anime",
+  changes: true,
   frame: 0,
   propCSSGroup: "transform",
   propCSS: "translateY",
@@ -111,6 +114,7 @@ const reducer = (state, action) => {
 
       copy.animations[index].timing[frame][point] = value;
       copy.animations[index].timing[frame].curve = BEZIER;
+      copy.changes = true;
       return copy;
     }
 
@@ -120,6 +124,7 @@ const reducer = (state, action) => {
 
       copy.animations[index].timing[frame][point][axis] = value;
       copy.animations[index].timing[frame].curve = BEZIER;
+      copy.changes = true;
       return copy;
     }
 
@@ -165,6 +170,7 @@ const reducer = (state, action) => {
           index
         );
       }
+      copy.changes = true;
       return copy;
     }
 
@@ -189,6 +195,7 @@ const reducer = (state, action) => {
 
       return {
         ...state,
+        changes: true,
         propsCSSList: filter,
         propCSS: undefined,
         propCSSGroup: false,
@@ -216,6 +223,7 @@ const reducer = (state, action) => {
       let { index, frame, value } = action.payload;
 
       copy.animations[index].frames[frame] = roundFloat(value);
+      copy.changes = true;
       return copy;
     }
 
@@ -236,6 +244,7 @@ const reducer = (state, action) => {
       // split curve and update animations frames
       let t = solveTatX(cp.clt, cp.crt, x);
       let split = splitCurveAtT(t, cp.clt, cp.crt);
+      console.log(t);
 
       anime.frames.splice(frameIndex, 0, roundFloat(pos));
       anime.timing.splice(frameIndex, 0, roundCoordX(split.rtHalf));
@@ -275,7 +284,7 @@ const reducer = (state, action) => {
           cprop.values.splice(i, 0, newValue);
         }
       }
-
+      copy.changes = true;
       return copy;
     }
 
@@ -306,6 +315,7 @@ const reducer = (state, action) => {
         }
       }
       copy.frame = 0;
+      copy.changes = true;
       return copy;
     }
 
@@ -316,7 +326,7 @@ const reducer = (state, action) => {
       if (propGroup) copyProps[propGroup].children[prop].values[frame] = value;
       else copyProps[prop].values[frame] = value;
 
-      return { ...state, propsCSSList: copyProps };
+      return { ...state, changes: true, propsCSSList: copyProps };
     }
 
     case SET_ANIMATION_PARAMETER: {
@@ -324,7 +334,7 @@ const reducer = (state, action) => {
       let { parameter, index, value } = action.payload;
 
       copyAnime[index][parameter] = value;
-      return { ...state, animations: copyAnime };
+      return { ...state, changes: true, animations: copyAnime };
     }
 
     case SET_ANIMATION_FRAME_TIMING: {
@@ -332,7 +342,7 @@ const reducer = (state, action) => {
       let { frame, index, timing } = action.payload;
 
       copyAnime[index].timing[frame] = getTiming(timing);
-      return { ...state, animations: copyAnime };
+      return { ...state, changes: true, animations: copyAnime };
     }
 
     case ADD_ANIMATION: {
@@ -359,11 +369,13 @@ const reducer = (state, action) => {
       let keys = Object.keys(copyProps);
 
       // set new animtion for the props
+      let counter = 0;
       const frames = copyAnime[0].frames;
       for (let key of keys) {
         const prop = copyProps[key];
 
         if (prop.animationIndex === index) {
+          counter += 1;
           let psk = prop.father ? Object.keys(prop.children) : [key];
           let deepProp = prop.father ? prop.children : copyProps;
 
@@ -384,6 +396,7 @@ const reducer = (state, action) => {
       return {
         animationName: state.animationName,
         frame: 0,
+        changes: counter > 0 ? true : state.changes,
         propCSSGroup: false,
         propCSS: undefined,
         propCSSCounter: state.propCSSCounter,
@@ -443,7 +456,7 @@ const reducer = (state, action) => {
           return roundFloat(setInRange(v * scale + offset, p.range));
         });
       reverse && p.values.reverse();
-      return { ...state, propsCSSList: copyProps };
+      return { ...state, changes: true, propsCSSList: copyProps };
     }
 
     case CHANGE_ANIMATION_NAME: {
@@ -452,7 +465,12 @@ const reducer = (state, action) => {
 
       for (let anime of copyAnime)
         anime.name = anime.name.replace(state.animationName, name);
-      return { ...state, animationName: name, animations: copyAnime };
+      return {
+        ...state,
+        changes: true,
+        animationName: name,
+        animations: copyAnime,
+      };
     }
 
     case SET_PROP_CSS_UNIT: {
@@ -461,7 +479,11 @@ const reducer = (state, action) => {
       let cprop = group ? copyProps[group].children[prop] : copyProps[prop];
 
       cprop.unit = unit;
-      return { ...state, propsCSSList: copyProps };
+      return { ...state, changes: true, propsCSSList: copyProps };
+    }
+
+    case SAVE_CHANGES: {
+      return { ...state, changes: false };
     }
 
     default:

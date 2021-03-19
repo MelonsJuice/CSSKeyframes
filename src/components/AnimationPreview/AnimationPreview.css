@@ -20,7 +20,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
   font-size: 1.6em;
   height: 2em;
@@ -35,4 +35,40 @@
 }
 .send-button:hover {
   color: var(--color-purple);
+}
+
+.animation-preview-button {
+  position: relative;
+  font-weight: 700;
+  height: 1.8em;
+  color: #fff;
+  background-color: var(--color-purple);
+}
+
+.animation-preview-menu-editors {
+  position: absolute;
+  top: 4em;
+  right: 0;
+  display: block;
+  width: 32em;
+  height: max-content;
+  padding: 1.6em;
+  background: var(--color-bg);
+  box-shadow: 0 0.4em 0.6em var(--color-purple-transparent);
+  border-radius: 0.8em;
+  z-index: 10;
+}
+
+.animation-preview-menu-editor-text {
+  width: 100%;
+  padding-left: 1.6em;
+  height: 20em;
+  border: none;
+  outline: none;
+  background: none;
+  resize: none;
+  color: var(--font-color);
+  font-size: 1.4em;
+  font-family: var(--font-main);
+  font-weight: 700;
 }

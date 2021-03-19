@@ -1,3 +1,7 @@
 .animation-editor {
   width: 100%;
 }
+
+.animation-editor input[type="number"] {
+  width: 2.8em;
+}

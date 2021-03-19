@@ -311,16 +311,8 @@ const PropsCSSEditor = () => {
             </div>
             <button
               onSubmit={submitPropTransform}
-              style={{
-                width: "100%",
-                height: "2em",
-                background: "var(--color-purple)",
-                color: "#fff",
-                textAlign: "center",
-                fontWeight: "700",
-                marginTop: "0.8em",
-                cursor: "pointer",
-              }}
+              className="max-button"
+              style={{ marginTop: "0.8em" }}
             >
               Apply
             </button>

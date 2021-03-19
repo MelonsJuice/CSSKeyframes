@@ -14,11 +14,11 @@ import "./FramesBar.css";
 const FramesBar = () => {
   const { animations, animationIndex, dispatch } = useContext(AppContext);
   const canvasRef = useRef(null);
+  const previewRef = useRef(null);
   const [mod, setMod] = useState("edit");
   const buttons = useRef([]);
 
   var canvas, frame, offset, range, scale;
-
   const handleMoveFrame = (e) => {
     frame = parseInt(e.target.dataset.frame);
     canvas = canvasRef.current.getBoundingClientRect();
@@ -55,10 +55,8 @@ const FramesBar = () => {
         // search the pos for new frame
         for (let i = 0; i < frames.length - 1; i++)
           if (x > frames[i] && x < frames[i + 1]) {
-            // adjust x value
             let fRange = [frames[i] + 0.01, frames[i + 1] - 0.01];
-            x = setInRange(x, fRange);
-
+            x = setInRange(x, fRange); // adjust x value
             newIndex = i + 1;
             break;
           }
@@ -93,6 +91,25 @@ const FramesBar = () => {
     window.removeEventListener("mouseup", releaseFrame);
   };
 
+  const handlePreviewFrame = (e) => {
+    canvas = canvasRef.current.getBoundingClientRect();
+    previewRef.current.style.transform = "translate(-50%, -0.36em) scale(1)";
+    mod === "add" && window.addEventListener("mousemove", movePreviewFrame);
+  };
+
+  const removeHandlePreviewFrame = () => {
+    previewRef.current.style.transform = "translate(-50%, -0.36em) scale(0)";
+    window.removeEventListener("mousemove", movePreviewFrame);
+  };
+
+  const movePreviewFrame = (e) => {
+    let nextPos = setInRange(e.clientX - canvas.x, [0, canvas.width]);
+    let perc = ((nextPos / canvas.width) * 100).toFixed(0);
+
+    previewRef.current.style.left = perc + "%";
+    previewRef.current.children[1].children[0].innerText = perc + "%";
+  };
+
   const handleChange = (e) => {
     let btns = buttons.current;
     let toTurnOff = e.target === btns[0] ? 1 : 0;
@@ -115,8 +132,29 @@ const FramesBar = () => {
     <section className="frames-bar">
       {/* frames bar */}
       <article style={{ padding: "0 1em" }} onMouseDown={handleMoveFrame}>
-        <div ref={canvasRef} className="frames-bar-bar">
-          <div className="flex-center frames-bar-frame-preview"></div>
+        <div
+          ref={canvasRef}
+          className="frames-bar-bar"
+          onMouseEnter={handlePreviewFrame}
+          onMouseLeave={removeHandlePreviewFrame}
+        >
+          {/* preview frame */}
+          <div
+            ref={previewRef}
+            className="frames-bar-frame-container"
+            style={{
+              display: mod === "add" ? "block" : "none",
+              opacity: "0.8",
+              transition: "transform 0.2s cubic-bezier(0.06, 0.55, 0, 1)",
+            }}
+          >
+            <span className="flex-center frames-bar-frame">
+              <h2>?</h2>
+            </span>
+            <span className="flex-center frames-bar-frame-baloon">
+              <h2></h2>
+            </span>
+          </div>
           {animations[animationIndex].frames.map((frame, index) => {
             return (
               <div
@@ -164,17 +202,10 @@ const FramesBar = () => {
               }}
             >
               <div
+                className="pop-up-background"
                 style={{
-                  position: "absolute",
-                  display: "block",
-                  width: "100%",
-                  height: "100%",
                   borderRadius: "0.8em",
-                  background: "var(--color-purple)",
-                  transformOrigin: "center",
                   transform: "scale(" + (mod === button[0] ? "1" : "0") + ")",
-                  transition: "0.2s cubic-bezier(0.06, 0.55, 0.2, 1)",
-                  zIndex: "-1",
                 }}
               ></div>
               <FontAwesomeIcon icon={button[1]} />

@@ -16,7 +16,6 @@
 .frames-bar-frame-container {
   position: absolute;
   transform: translate(-50%, -0.36em);
-  opacity: 0;
 }
 
 .frames-bar-frame {
@@ -49,11 +48,14 @@
 
 .frames-bar-frame-preview {
   position: absolute;
-  width: 2em;
-  height: 3.6em;
+  width: 1.25em;
+  height: 2.25em;
   user-select: none;
-  border-radius: 0.8em;
+  border-radius: 0.5em;
+  font-size: 1.6em;
+  font-weight: 700;
   color: #fff;
   background: var(--color-violet);
   cursor: pointer;
+  transform: translateX(-50%);
 }

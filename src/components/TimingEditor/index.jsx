@@ -93,7 +93,7 @@ const TimingEditor = () => {
           frame: cFrame,
           point: point,
           axis: axis,
-          value: value === "" ? "" : value,
+          value: value === "" ? "" : parseFloat(value),
         },
       });
   };
@@ -112,7 +112,17 @@ const TimingEditor = () => {
   return (
     <section className="timing-editor">
       <div className="flex-row" style={{ padding: "0 4em" }}>
-        <div className="flex-center timing-editor-frame">
+        <div
+          className="flex-center timing-editor-frame"
+          style={{ color: cFrame === frame ? "#fff" : "var(--color-purple)" }}
+        >
+          <div
+            className="pop-up-background"
+            style={{
+              borderRadius: "0.8em",
+              transform: "scale(" + (cFrame === frame ? "1" : "0") + ")",
+            }}
+          ></div>
           <h2>{cFrame + 1}</h2>
         </div>
         <Select
@@ -121,7 +131,19 @@ const TimingEditor = () => {
           direction="top"
           callback={setTiming}
         />
-        <div className="flex-center timing-editor-frame">
+        <div
+          className="flex-center timing-editor-frame"
+          style={{
+            color: cFrame + 1 === frame ? "#fff" : "var(--color-purple)",
+          }}
+        >
+          <div
+            className="pop-up-background"
+            style={{
+              borderRadius: "0.8em",
+              transform: "scale(" + (cFrame + 1 === frame ? "1" : "0") + ")",
+            }}
+          ></div>
           <h2>{cFrame + 2}</h2>
         </div>
       </div>

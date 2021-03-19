@@ -3,19 +3,9 @@ import "./AnimationEditor.css";
 
 import Select from "../Select";
 import AppContext from "../../context/AppContext";
-import {
-  faInfinity,
-  faMinus,
-  faPlus,
-  faRedoAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faInfinity, faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  ADD_ANIMATION,
-  DELETE_ANIMATION,
-  SET_ANIMATION,
-  SET_ANIMATION_PARAMETER,
-} from "../../context/actions";
+import { SET_ANIMATION_PARAMETER } from "../../context/actions";
 import { isInRange } from "../../functions";
 
 //////////////////////
@@ -23,7 +13,6 @@ import { isInRange } from "../../functions";
 //////////////////////
 const AnimationEditor = () => {
   const { animations, animationIndex, dispatch } = useContext(AppContext);
-  const animeCount = useRef(0);
 
   const checkValue = (parameter, value) => {
     if (value === "")
@@ -60,53 +49,15 @@ const AnimationEditor = () => {
     });
   };
 
-  const addAnimation = () => {
-    animeCount.current += 1;
-    dispatch({ type: ADD_ANIMATION, payload: animeCount.current });
-  };
-
-  const deleteAnimation = () => {
-    animations.length > 1 &&
-      dispatch({
-        type: DELETE_ANIMATION,
-        payload: animationIndex,
-      });
-  };
-
   return (
     <section className="animation-editor flex-row">
-      {/* create, delete animation */}
-      <article className="flex-row" style={{ width: "max-content" }}>
-        <Select
-          value={animations[animationIndex].name}
-          options={animations.map((animation) => animation.name)}
-          direction="bottom"
-          callback={(value, index) => {
-            dispatch({ type: SET_ANIMATION, payload: index });
-          }}
-        />
-        <div style={{ marginLeft: "0.6em" }}>
-          {[
-            [addAnimation, faPlus],
-            [deleteAnimation, faMinus],
-          ].map((btn, index) => {
-            return (
-              <button
-                key={index}
-                className="app-button space-mid-row"
-                onClick={btn[0]}
-              >
-                <FontAwesomeIcon icon={btn[1]} />
-              </button>
-            );
-          })}
-        </div>
-      </article>
-
       {/* animation parameters */}
       <article
         className="flex-center"
-        style={{ width: "max-content", fontSize: "1.6em" }}
+        style={{
+          width: "max-content",
+          fontSize: "1.4em",
+        }}
       >
         <AnimationInput
           prop="duration"
@@ -193,6 +144,44 @@ const AnimationEditor = () => {
             </div>
           }
         />
+        <div
+          className="flex-row space-big-double-row"
+          style={{ width: "max-content" }}
+        >
+          <label style={{ fontWeight: "700", textTransform: "capitalize" }}>
+            fill-mode
+          </label>
+          &nbsp;
+          <span style={{ fontSize: "0.6em" }}>
+            <Select
+              value={animations[animationIndex].fillMode}
+              options={["none", "forwards", "backwards", "both"]}
+              callback={(value, index) =>
+                editAnimationParameter("fillMode", value)
+              }
+              direction="bottom"
+            />
+          </span>
+        </div>
+        <div
+          className="flex-row space-big-double-row"
+          style={{ width: "max-content" }}
+        >
+          <label style={{ fontWeight: "700", textTransform: "capitalize" }}>
+            direction
+          </label>
+          &nbsp;
+          <span style={{ fontSize: "0.6em" }}>
+            <Select
+              value={animations[animationIndex].direction}
+              options={["normal", "reverse", "alternate", "alternate-reverse"]}
+              callback={(value, index) =>
+                editAnimationParameter("direction", value)
+              }
+              direction="bottom"
+            />
+          </span>
+        </div>
       </article>
     </section>
   );
@@ -215,10 +204,10 @@ const AnimationInput = ({
       className="flex-row space-big-double-row"
       style={{ width: "max-content" }}
     >
-      <label style={{ fontWeight: "600", textTransform: "capitalize" }}>
+      <label style={{ fontWeight: "700", textTransform: "capitalize" }}>
         {prop}
       </label>
-      &nbsp;&nbsp;
+      &nbsp;
       <div
         className="flex-row"
         style={{
