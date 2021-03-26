@@ -5,14 +5,7 @@ import FramesBar from "../../components/FramesBar";
 
 const RightArea = () => {
   return (
-    <section
-      style={{
-        display: "grid",
-        gridTemplateRows: "auto max-content",
-        height: "100vh",
-        padding: "3.2em",
-      }}
-    >
+    <section className="right-area">
       <article className="flex-center">
         <AnimationPreview />
       </article>

@@ -61,7 +61,7 @@ const PropsCSSEditor = () => {
   const setColor = (param, value, prop, index) => {
     let rgb =
       param === "rgb" ? hexToRgb(value) : prop.values[index].slice(0, 3);
-    let alpha = param === "alpha" ? value : prop.values[index][3];
+    let alpha = param === "alpha" ? Number(value) : prop.values[index][3];
     let newColor = [...rgb, alpha];
 
     dispatch({
@@ -153,7 +153,7 @@ const PropsCSSEditor = () => {
                   ].name
                 }
                 options={animations.map((animation) => animation.name)}
-                direction="top"
+                origin="top"
                 callback={(value, index) => {
                   console.log(value, index);
                   dispatch({
@@ -177,7 +177,6 @@ const PropsCSSEditor = () => {
             ? propsCSSList[propCSSGroup].children[propCSS]
             : propsCSSList[propCSS]
           ).values.map((value, index) => {
-            // put here the code in case on fail //
             const [range, type] = [prop.range, prop.type];
             return (
               <div
@@ -310,7 +309,7 @@ const PropsCSSEditor = () => {
               />
             </div>
             <button
-              onSubmit={submitPropTransform}
+              onClick={submitPropTransform}
               className="max-button"
               style={{ marginTop: "0.8em" }}
             >

@@ -1,0 +1,13 @@
+.dummy-code-editor-text {
+  width: 100%;
+  padding-left: 1.6em;
+  height: 20em;
+  border: none;
+  outline: none;
+  background: none;
+  resize: none;
+  color: var(--font-color);
+  font-size: 1.4em;
+  font-family: var(--font-main);
+  font-weight: 700;
+}

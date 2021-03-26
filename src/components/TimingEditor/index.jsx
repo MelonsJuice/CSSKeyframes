@@ -128,7 +128,7 @@ const TimingEditor = () => {
         <Select
           value={animations[animationIndex].timing[cFrame].curve}
           options={[LINEAR, EASE, EASEIN, EASEOUT, EASEINOUT, BEZIER]}
-          direction="top"
+          origin="top"
           callback={setTiming}
         />
         <div

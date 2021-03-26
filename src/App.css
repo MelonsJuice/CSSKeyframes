@@ -2,19 +2,19 @@
 :root {
   /* FONT */
   --font-main: "Nunito Sans", sans-serif;
-  --font-color: #221655;
+  --font-color: #140d33;
 
   /* COLORS */
   --color-bg: #f4f0ff;
   --color-purple: #420dff;
-  --color-purple-transparent: #410dff44;
+  --color-purple-transparent: #410dff33;
   --color-violet: #a60dff;
-  --gradient: linear-gradient(135deg, var(--color-lightblue), #fff);
+  --color-white: #fff;
 
   --shadow: 0.24em 0.24em 0.48em var(--color-purple-transparent),
-    -0.24em -0.24em 0.48em #fff;
+    -0.24em -0.24em 0.48em var(--color-white);
   --hollow-shadow: inset 0.1em 0.1em 0.18em var(--color-purple-transparent),
-    inset -0.1em -0.1em 0.18em #fff;
+    inset -0.1em -0.1em 0.18em var(--color-white);
 
   /* SECTIONS */
   --prop-timing-width: 36em;
@@ -47,7 +47,7 @@ body {
   display: block;
   font: 500 10px var(--font-main);
   color: var(--font-color);
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background: var(--color-bg);
 }
@@ -94,6 +94,14 @@ input::placeholder {
 
 ul {
   list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--font-color);
+}
+a:visited {
+  color: var(--font-color);
 }
 
 /* GLOBAL CUSTOM CLASSES */
@@ -238,30 +246,74 @@ ul {
   background: var(--color-purple);
   color: #fff;
   text-align: center;
-  font-wùeight: 700;
+  font-weight: 700;
+  border-radius: 0.4em;
+}
+
+/* APP STRUCTURE */
+.app-container {
+  display: grid;
+  grid-template-columns: max-content auto;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100%;
+}
+.left-area {
+  width: max-content;
+  height: 100vh;
+}
+.prop-timing-container {
+  display: grid;
+  grid-template-rows: calc(100vh - var(--timing-editor-height) - 6.4em) max-content;
+  height: 100%;
+  padding: 3.2em 0;
+}
+.right-area {
+  display: grid;
+  grid-template-rows: auto max-content;
+  height: 100vh;
+  padding: 3.2em;
 }
 
 /*****************/
 /* MEDIA QUERIES */
 /*****************/
-@media screen and (max-width: 1720px) {
-  body {
-    font-size: 8px;
-  }
-}
-@media screen and (max-height: 720px) {
+@media screen and (max-width: 1720px), screen and (max-height: 720px) {
   body {
     font-size: 8px;
   }
 }
 
-@media screen and (max-width: 1380px) {
+@media screen and (max-width: 1380px), screen and (max-height: 576px) {
   body {
-    font-size: 6px;
+    font-size: 7.2px;
   }
 }
-@media screen and (max-height: 578px) {
-  body {
-    font-size: 6px;
+
+@media screen and (max-width: 1225px) {
+  .app-container {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100vh;
+    min-width: 824px;
+    min-height: 800px;
+  }
+  .left-area {
+    flex-direction: row;
+    width: 100vw;
+    height: 40vh;
+    min-width: 824px;
+    min-height: 320px;
+    padding-right: 3.2em;
+  }
+  .prop-timing-container {
+    grid-template-rows: none;
+    grid-template-columns: calc(var(--prop-timing-width) + 3.2em) max-content;
+  }
+  .right-area {
+    width: 100vw;
+    height: 60vh;
+    min-width: 824px;
+    min-height: 480px;
   }
 }

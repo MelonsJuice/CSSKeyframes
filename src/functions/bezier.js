@@ -13,6 +13,7 @@ export function calcBezierCurve(lt, clt, crt, rt, t, axis) {
   );
 }
 
+// https://gist.github.com/weepy/6009631
 export function solveTatX(clt, crt, x) {
   let a = 3 * clt[0] - 3 * crt[0] + 1;
   let b = (-6 * clt[0] + 3 * crt[0]) / a;
@@ -38,7 +39,7 @@ export function solveTatX(clt, crt, x) {
   let rz = 2 * Math.sqrt(q);
 
   // negative delta, three real solutions
-  // before return root, check if it is the correct solution
+  // check if it is the correct solution
   let temp;
   for (let i = 0; i <= 4; i += 2) {
     temp = -term + rz * Math.cos((i * Math.PI + dum) / 3.0);
@@ -96,8 +97,6 @@ export function splitCurveAtT(t, clt, crt) {
   };
 }
 
-// splitting the curve with max x can
-// create some bugs (x < 0 || x > 1)
 export function roundCoordX(cp) {
   cp.clt[0] = setInRange(cp.clt[0], [0, 1]);
   cp.crt[0] = setInRange(cp.crt[0], [0, 1]);

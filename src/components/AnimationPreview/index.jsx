@@ -1,19 +1,15 @@
 import {
-  faPaperPlane,
   faPlus,
   faMinus,
   faPlay,
   faPause,
-  faEdit,
   faStepBackward,
-  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   ADD_ANIMATION,
-  CHANGE_ANIMATION_NAME,
   DELETE_ANIMATION,
   SAVE_CHANGES,
   SET_ANIMATION,
@@ -21,9 +17,15 @@ import {
 } from "../../context/actions";
 import AppContext from "../../context/AppContext";
 import "./AnimationPreview.css";
-import animationKeyframes from "./animationKeyframes";
+import { animationKeyframes } from "./animationKeyframes";
 import { getStringTiming } from "../../functions.js";
 import Select from "../Select";
+import DummyCodeEditor from "../DummyCodeEditor";
+import AnimationClassPanel from "../AnimationClassPanel";
+import "../../mjf_font/css/mjf.css";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faFileAlt, faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
+import changesTheme from "./changesTheme";
 
 const AnimationPreview = () => {
   const {
@@ -39,7 +41,6 @@ const AnimationPreview = () => {
     dispatch,
   } = useContext(AppContext);
   // animation states
-  const [className, setClassName] = useState(animationName);
   const [running, setRunning] = useState(false);
   const [restart, setRestart] = useState(false);
   const restartRef = useRef(null);
@@ -47,21 +48,18 @@ const AnimationPreview = () => {
   const animeCount = useRef(0);
 
   // editor states
-  const [HTMLCode, setHTMLCode] = useState("");
-  const [CSSCode, setCSSCode] = useState("");
-  const [editorSelected, setEditorSelected] = useState("HTML");
+  const editorMenuRef = useRef(null);
+  const [panel, setPanel] = useState("code");
+  const [openMenu, setOpenMenu] = useState(false);
+  const [styleSheet, setStyleSheet] = useState("");
+
+  // more button
+  const [viewMore, setViewMore] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   ///////////////////////
   // ANIMATION HANDLES //
   ///////////////////////
-  const handleNameChange = (e) => {
-    let value = e.target.value;
-    let check =
-      value === "-" ? ["-"] : value.match(/-?[_a-zA-Z]+[_a-zA-Z0-9-]*/g);
-    let name = check || [""];
-    value === name[0] && setClassName(name[0]);
-  };
-
   const addAnimation = () => {
     animeCount.current += 1;
     dispatch({ type: ADD_ANIMATION, payload: animeCount.current });
@@ -72,18 +70,6 @@ const AnimationPreview = () => {
       dispatch({
         type: DELETE_ANIMATION,
         payload: animationIndex,
-      });
-  };
-
-  const changeClassName = (e) => {
-    e.preventDefault();
-    let check = className || "anime";
-    !className && setClassName("anime");
-
-    animationName !== check &&
-      dispatch({
-        type: CHANGE_ANIMATION_NAME,
-        payload: check,
       });
   };
 
@@ -101,41 +87,53 @@ const AnimationPreview = () => {
     const hashKeys = Object.keys(hash);
 
     // reset all keyframes
-    while (animationKeyframes.sheet.rules.length)
-      animationKeyframes.sheet.deleteRule(0);
+    // .animation-class is always at the second position
+    while (animationKeyframes.sheet.rules.length > 1)
+      animationKeyframes.sheet.deleteRule(1);
+
+    // return if no property has been animated
+    if (!hashKeys.length) {
+      setStyleSheet("");
+      return;
+    }
 
     // create animation class and remove the previous
     dummyRef.current.classList.remove("animation-class");
-    animationKeyframes.sheet.insertRule(`.animation-class {
-      animation-name: ${hashKeys.map((key) => animations[key].name).join(", ")};
-      animation-duration: ${hashKeys
-        .map((key) => {
-          return (
-            animations[key].duration +
-            (animations[key].repeatDelay ? animations[key].delay : "") +
-            "s"
-          );
-        })
-        .join(", ")};
-      animation-delay: ${hashKeys
-        .map((key) => {
-          return animations[key].repeatDelay
-            ? "0s"
-            : animations[key].delay + "s";
-        })
-        .join(", ")};
-      animation-iteration-count: ${hashKeys
-        .map((key) =>
-          animations[key].infinite ? "infinite" : animations[key].repeat
-        )
-        .join(", ")};
-      animation-fill-mode: ${hashKeys
-        .map((key) => animations[key].fillMode)
-        .join(", ")};
-      animation-direction: ${hashKeys
-        .map((key) => animations[key].direction)
-        .join(", ")};
-    }`);
+    var animeStyleSheet = `.animation-class {
+  animation-name: ${hashKeys.map((key) => animations[key].name).join(", ")};
+  animation-duration: ${hashKeys
+    .map((key) => {
+      return (
+        animations[key].duration +
+        (animations[key].repeatDelay ? animations[key].delay : "") +
+        "s"
+      );
+    })
+    .join(", ")};
+  animation-delay: ${hashKeys
+    .map((key) => {
+      return animations[key].repeatDelay ? "0s" : animations[key].delay + "s";
+    })
+    .join(", ")};
+  animation-iteration-count: ${hashKeys
+    .map((key) =>
+      animations[key].infinite ? "infinite" : animations[key].repeat
+    )
+    .join(", ")};
+  animation-fill-mode: ${hashKeys
+    .map((key) => animations[key].fillMode)
+    .join(", ")};
+  animation-direction: ${hashKeys
+    .map((key) => animations[key].direction)
+    .join(", ")};
+}
+
+`;
+    animationKeyframes.sheet.insertRule(animeStyleSheet, 1);
+    animeStyleSheet = animeStyleSheet.replace(
+      ".animation-class",
+      "." + animationName
+    );
 
     // create new keyframes
     const keyframesArr = hashKeys.map((key) => {
@@ -147,49 +145,59 @@ const AnimationPreview = () => {
         let perc = a.frames[i] * (1 - offset) + offset;
         let init = a.repeatDelay && i === 0 ? "0%, " : "";
 
-        content += `${init + (perc * 100).toFixed(2)}% {
-          ${timing ? "animation-timing-function: " + timing + ";\n" : ""}${hash[
-          key
-        ]
-          .map((prop) => {
-            let values;
-            if (propsCSSList[prop].father) {
-              let children = Object.keys(propsCSSList[prop].children);
-              let allProps = "";
-              for (let son of children) {
-                let p = propsCSSList[prop].children[son];
-                allProps += son + "(" + p.values[i] + p.unit + ") ";
+        content += `\n    ${
+          init + (perc * 100).toFixed(a.repeatDelay ? 2 : 0)
+        }% {${
+          (timing
+            ? "\n        animation-timing-function: " + timing + ";\n"
+            : "\n") +
+          hash[key]
+            .map((prop) => {
+              let values = "        ";
+              if (propsCSSList[prop].father) {
+                let children = Object.keys(propsCSSList[prop].children);
+                let p = propsCSSList[prop].children;
+                let allProps = children.map(
+                  (son) => son + "(" + p[son].values[i] + p[son].unit + ")"
+                );
+                values += prop + ": " + allProps.join(" ");
+              } else {
+                let p = propsCSSList[prop];
+                values +=
+                  prop +
+                  ": " +
+                  (p.type === "color"
+                    ? "rgba(" + p.values[i] + ")"
+                    : p.values[i] + p.unit);
               }
-              values = prop + ": " + allProps;
-            } else {
-              let p = propsCSSList[prop];
-              values =
-                prop +
-                ": " +
-                (p.type === "color"
-                  ? "rgba(" + p.values[i] + ")"
-                  : p.values[i] + p.unit);
-            }
-            return values;
-          })
-          .join(";\n")}
+              return values;
+            })
+            .join(";\n") +
+          ";"
         }
-        `;
+    }`;
       }
       return content;
     });
 
     // add frames to stylesheet
     for (let i = 0; i < keyframesArr.length; i++) {
+      animeStyleSheet += `@keyframes ${animations[hashKeys[i]].name} {${
+        keyframesArr[i]
+      }
+}
+
+`;
       animationKeyframes.sheet.insertRule(
         `@keyframes ${animations[hashKeys[i]].name} {
         ${keyframesArr[i]}
-      }`,
+        }`,
         animationKeyframes.sheet.rules.length
       );
     }
 
     // add animation class to dummy
+    setStyleSheet(animeStyleSheet);
     void dummyRef.current.offsetHeight; // trigger
     dummyRef.current.classList.add("animation-class");
   };
@@ -245,6 +253,9 @@ const AnimationPreview = () => {
       dummyRef.current.style = {};
     };
   }, [animationIndex, propCSSCounter]);
+  useEffect(() => {
+    restartAnimation();
+  }, []);
 
   const previewFrame = (key) => {
     if (!key) return;
@@ -271,80 +282,149 @@ const AnimationPreview = () => {
     for (let key of props) previewFrame(key);
   };
 
-  ///////////////////////////
-  // EDITOR CHANGES HANDLE //
-  ///////////////////////////
-  const applyChanges = () => {
-    switch (editorSelected) {
-      case "HTML":
-        dummyRef.current.innerHTML = HTMLCode;
-        break;
-      case "CSS":
-        break;
-      default:
-        return;
+  const handleEditorMenu = (menu) => {
+    if (openMenu && menu === panel) setOpenMenu(false);
+    else if (!openMenu) {
+      editorMenuRef.current.children[0].style.transition = "none";
+      setOpenMenu(true);
+      setPanel(menu);
+    } else {
+      editorMenuRef.current.children[0].style.transition =
+        "0.48s cubic-bezier(0.18, 0.55, 0.25, 1)";
+      setPanel(menu);
     }
   };
+  useEffect(() => {
+    const container = editorMenuRef.current.children[0];
+    const move = panel === "code" ? "0" : "-36em";
+    const height = openMenu
+      ? container.children[panel === "code" ? 0 : 1].getBoundingClientRect()
+          .height
+      : 0;
+
+    container.style.transform = "translateX(" + move + ")";
+    editorMenuRef.current.style.opacity = openMenu ? "1" : "0";
+    editorMenuRef.current.style.height = height + "px";
+    editorMenuRef.current.style.top = openMenu ? "4em" : "3em";
+  }, [openMenu, panel]);
 
   return (
     <section className="animation-preview flex-center">
       <nav className="flex-row animation-preview-nav">
-        <article
-          className="flex-row"
-          style={{ width: "max-content", fontSize: "0.5em" }}
-        >
-          {/* animation selection */}
-          <Select
-            value={animations[animationIndex].name}
-            options={animations.map((animation) => animation.name)}
-            direction="top"
-            callback={(value, index) => {
-              dispatch({ type: SET_ANIMATION, payload: index });
-            }}
-          />
-          <div style={{ marginLeft: "0.6em" }}>
-            {[
-              [addAnimation, faPlus],
-              [deleteAnimation, faMinus],
-            ].map((btn, index) => {
-              return (
-                <button
-                  key={index}
-                  className="app-button space-mid-row"
-                  onClick={btn[0]}
-                >
-                  <FontAwesomeIcon icon={btn[1]} />
-                </button>
-              );
-            })}
-          </div>
-        </article>
-
-        {/* change animations names */}
         <div className="flex-row">
-          <form
-            className="flex-row space-big-row"
-            style={{
-              padding: "0.2em",
-              borderRadius: "0.4em",
-              boxShadow: "var(--hollow-shadow)",
-            }}
-            onSubmit={changeClassName}
+          <div className="flex-row space-big-double-row">
+            <img
+              src={"/imgs/logo_" + (darkMode ? "light" : "dark") + ".png"}
+              style={{ height: "2.8em" }}
+            ></img>
+          </div>
+          <div
+            className="flex-center space-big-double-row"
+            style={{ position: "relative" }}
           >
-            <input
-              type="text"
-              value={className}
-              onChange={handleNameChange}
-              placeholder="insert a name"
-              style={{ fontWeight: "700", width: "max-content" }}
-            />
             <button
-              onSubmit={changeClassName}
-              className="flex-center send-button"
+              className="flex-center animation-preview-button"
+              onClick={() => setViewMore(!viewMore)}
             >
-              <FontAwesomeIcon icon={faPaperPlane} />
+              More
             </button>
-          </form>
+            <div
+              style={{
+                position: "absolute",
+                top: "2em",
+                width: "max-content",
+                height: viewMore ? "10em" : "0",
+                padding: viewMore ? "0.8em" : "0",
+                opacity: viewMore ? "1" : "0",
+                fontSize: "1.16em",
+                background: "var(--color-bg)",
+                boxShadow: "0 0.2em 0.4em var(--color-purple-transparent)",
+                borderRadius: "0.4em",
+                overflow: "hidden",
+                transition:
+                  "all 0.4s ease, height cubic-bezier(0.06, 0.55, 0.2, 1) 0.2s",
+              }}
+            >
+              <div
+                className="flex-row space-big-col"
+                style={{ flexDirection: "column", alignItems: "baseline" }}
+              >
+                <h5>Theme</h5>
+                <div className="flex-row" style={{ fontSize: "0.88em" }}>
+                  <FontAwesomeIcon icon={faSun} />
+                  &nbsp;
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    onClick={(e) => {
+                      ReactDOM.unstable_batchedUpdates(() => {
+                        changesTheme(e.target.checked);
+                        setDarkMode(e.target.checked);
+                      });
+                    }}
+                  />
+                  &nbsp;
+                  <FontAwesomeIcon icon={faMoon} />
+                </div>
+              </div>
+              <div
+                className="flex-row space-big-col"
+                style={{ flexDirection: "column", alignItems: "baseline" }}
+              >
+                <h5>Docs/Repo</h5>
+                <a
+                  href="#"
+                  className="max-button"
+                  style={{ color: "white", height: "max-content" }}
+                >
+                  <FontAwesomeIcon icon={faGithub} />
+                </a>
+              </div>
+              <div
+                className="flex-row space-big-col"
+                style={{ flexDirection: "column", alignItems: "baseline" }}
+              >
+                <h5>made by</h5>
+                <h6>MelonsJuice</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-row">
+          <article
+            className="flex-row"
+            style={{
+              width: "max-content",
+              fontSize: "0.5em",
+              marginRight: "4em",
+            }}
+          >
+            {/* animation selection */}
+            <div style={{ marginRight: "0.6em" }}>
+              {[
+                [addAnimation, faPlus],
+                [deleteAnimation, faMinus],
+              ].map((btn, index) => {
+                return (
+                  <button
+                    key={index}
+                    className="app-button space-mid-row"
+                    onClick={btn[0]}
+                  >
+                    <FontAwesomeIcon icon={btn[1]} />
+                  </button>
+                );
+              })}
+            </div>
+            <Select
+              value={animations[animationIndex].name}
+              options={animations.map((animation) => animation.name)}
+              origin="top"
+              callback={(value, index) => {
+                dispatch({ type: SET_ANIMATION, payload: index });
+              }}
+            />
+          </article>
 
           {/* play/pause - restart - update animation */}
           <div className="flex-row space-mid-row">
@@ -385,86 +465,42 @@ const AnimationPreview = () => {
             </button>
           </div>
 
-          {/* edit dummy */}
-          <button className="flex-center space-mid-row animation-preview-button">
-            Dummy&nbsp;&nbsp;
-            <FontAwesomeIcon icon={faEdit} style={{ fontSize: "0.8em" }} />
-          </button>
-
-          {/* copy & view code */}
-          <button className="flex-center space-mid-row animation-preview-button">
-            Code&nbsp;&nbsp;
-            <FontAwesomeIcon icon={faCode} style={{ fontSize: "0.8em" }} />
-          </button>
+          {/* edit dummy and copy class buttons */}
+          {[
+            ["#dummy", "code"],
+            [".class", "class"],
+          ].map((button) => {
+            return (
+              <button
+                key={button[1]}
+                className="flex-center space-mid-row animation-preview-button"
+                onClick={() => handleEditorMenu(button[1])}
+              >
+                {button[0]}
+              </button>
+            );
+          })}
         </div>
       </nav>
-      <div className="animation-preview-menu-editors">
-        <article style={{ width: "100%" }}>
-          <div className="flex-row">
-            {["HTML", "CSS"].map((button) => {
-              return (
-                <button
-                  key={button}
-                  onClick={() => setEditorSelected(button)}
-                  className={
-                    "flex-center space-mid-row app-button" +
-                    (editorSelected === button ? "-pressed" : "")
-                  }
-                  style={{
-                    position: "relative",
-                    fontSize: "1.2em",
-                    fontWeight: "700",
-                    padding: "0.32em 0.6em",
-                  }}
-                >
-                  <div
-                    className="pop-up-background"
-                    style={{
-                      borderRadius: "0.4em",
-                      transform:
-                        "scale(" +
-                        (editorSelected === button ? "1" : "0") +
-                        ")",
-                    }}
-                  ></div>
-                  {button}
-                </button>
-              );
-            })}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              margin: "1.2em 0",
-            }}
-          >
-            {/* editor */}
-            <h2>
-              {editorSelected === "HTML" ? "<div id='dummy'>" : "#dummy {"}
-            </h2>
-            <textarea
-              className="animation-preview-menu-editor-text"
-              value={editorSelected === "HTML" ? HTMLCode : CSSCode}
-              onChange={(e) => {
-                editorSelected === "HTML"
-                  ? setHTMLCode(e.target.value)
-                  : setCSSCode(e.target.value);
-              }}
-            />
-            <h2>{editorSelected === "HTML" ? "</div>" : "}"}</h2>
-          </div>
-          {/* save changes */}
-          <button
-            className="max-button"
-            onClick={applyChanges}
-            style={{ fontSize: "1.6em" }}
-          >
-            Apply changes
-          </button>
-        </article>
+
+      <div ref={editorMenuRef} className="animation-preview-menu-editors">
+        <div
+          style={{
+            position: "relative",
+            transform: "translateX(0)",
+          }}
+        >
+          <DummyCodeEditor dummy={dummyRef.current} />
+          <AnimationClassPanel
+            classSheet={styleSheet}
+            onNameChange={generateAnimation}
+          />
+        </div>
       </div>
-      <div ref={dummyRef} id="dummy"></div>
+
+      <div ref={dummyRef} id="dummy">
+        <i className="icon-dummy"></i>
+      </div>
     </section>
   );
 };

@@ -7,14 +7,7 @@ function App() {
   return (
     <div className="app">
       <AppProvider>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "max-content auto",
-            width: "100%",
-            height: "100%",
-          }}
-        >
+        <div className="app-container">
           <LeftArea />
           <RightArea />
         </div>

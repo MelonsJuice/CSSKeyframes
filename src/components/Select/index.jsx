@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import "./Select.css";
 
-const Select = ({ value, options, callback, direction }) => {
+const Select = ({ value, options, callback, origin }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
   const borderRadius = ["0.8em 0.8em 0 0", "0 0 0.8em 0.8em"];
@@ -22,7 +22,7 @@ const Select = ({ value, options, callback, direction }) => {
     <div
       className="select"
       style={{
-        borderRadius: direction === "top" ? borderRadius[0] : borderRadius[1],
+        borderRadius: origin === "top" ? borderRadius[0] : borderRadius[1],
       }}
     >
       <article
@@ -38,6 +38,7 @@ const Select = ({ value, options, callback, direction }) => {
               width: "6em",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             {value}
@@ -50,7 +51,7 @@ const Select = ({ value, options, callback, direction }) => {
             }}
           >
             <FontAwesomeIcon
-              icon={direction === "top" ? faAngleDown : faAngleUp}
+              icon={origin === "top" ? faAngleDown : faAngleUp}
             />
           </span>
         </div>
@@ -59,8 +60,8 @@ const Select = ({ value, options, callback, direction }) => {
         ref={menuRef}
         className="select-drop-menu"
         style={{
-          [direction]: "3.6em",
-          borderRadius: direction === "top" ? borderRadius[1] : borderRadius[0],
+          [origin]: "3.6em",
+          borderRadius: origin === "top" ? borderRadius[1] : borderRadius[0],
         }}
         onClick={handleClick}
       >
@@ -72,7 +73,9 @@ const Select = ({ value, options, callback, direction }) => {
               className="flex-center select-option select-option-menu"
             >
               <div style={{ fontSize: "1.2em" }} data-index={index}>
-                {option}
+                <span style={{ whiteSpace: "nowrap", overflowX: "scroll" }}>
+                  {option}
+                </span>
               </div>
             </article>
           );

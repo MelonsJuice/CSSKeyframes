@@ -4,18 +4,6 @@
   height: 100%;
 }
 
-#dummy {
-  position: absolute;
-  display: block;
-  width: 16em;
-  height: 16em;
-  border: 3.2px solid transparent;
-  border-radius: 1.6em;
-  background: var(--color-violet);
-  transform-origin: center;
-  transition: 0.4s ease;
-}
-
 .animation-preview-nav {
   position: absolute;
   top: 0;
@@ -24,17 +12,6 @@
   width: 100%;
   font-size: 1.6em;
   height: 2em;
-}
-
-.send-button {
-  width: 1.6em;
-  height: 1.6em;
-  font-size: 0.8em;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-.send-button:hover {
-  color: var(--color-purple);
 }
 
 .animation-preview-button {
@@ -47,28 +24,79 @@
 
 .animation-preview-menu-editors {
   position: absolute;
-  top: 4em;
+  top: 3em;
   right: 0;
   display: block;
-  width: 32em;
+  width: 36em;
+  height: 0;
   height: max-content;
-  padding: 1.6em;
+  opacity: 0;
   background: var(--color-bg);
   box-shadow: 0 0.4em 0.6em var(--color-purple-transparent);
   border-radius: 0.8em;
   z-index: 10;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.06, 0.55, 0.2, 1), opacity 0.24s ease;
+}
+.animation-preview-menu-editor {
+  position: absolute;
+  width: 36em;
+  padding: 1.6em;
+  height: max-content;
 }
 
-.animation-preview-menu-editor-text {
+.animation-preview-code-window {
   width: 100%;
-  padding-left: 1.6em;
+  font-weight: 700;
+  left: 36em;
+}
+.animation-preview-code-window label {
+  opacity: 0.6;
+}
+
+.animation-preview-code {
+  width: 100%;
   height: 20em;
-  border: none;
+  padding: 0.4em;
   outline: none;
-  background: none;
+  border: none;
+  border-radius: 0.4em;
+  background: #410dff12;
   resize: none;
   color: var(--font-color);
-  font-size: 1.4em;
+  font-size: 0.88em;
   font-family: var(--font-main);
   font-weight: 700;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  padding: 0.1em 0.32em;
+  background: var(--color-purple);
+  color: #fff;
+  border-radius: 0.2em;
+  transform-origin: right;
+  transform: scale(0);
+}
+
+#dummy > i::before {
+  font-size: 12em;
+}
+
+.pop-in {
+  animation: pop-in-frames 2s cubic-bezier(0.06, 0.55, 0.2, 1) 0.2s;
+}
+@keyframes pop-in-frames {
+  0% {
+    transform: scale(0);
+  }
+  15%,
+  90% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }

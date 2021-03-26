@@ -7,6 +7,7 @@ function normalizeColor(color) {
   return normArr;
 }
 
+// convert alpha value in white background
 function convertToRGB(rgba) {
   var rgb = [0, 0, 0];
   for (let i = 0; i < 3; i++) rgb[i] = 255 * (1 - rgba[3]) + rgba[i] * rgba[3];
@@ -34,7 +35,7 @@ function getMergeColor(mixFactor, rgba1, rgba2, normRgba1, normRgba2) {
     mixColor[c] = Number((mixColor[c] * 255).toFixed(0)); // reset value to 0 - 255
   }
 
-  // resetset with alpha value
+  // reset with alpha value
   mixColor = convertToRGBA(mixColor, alpha);
   mixColor[3] = parseFloat(mixColor[3].toFixed(3));
   return mixColor;

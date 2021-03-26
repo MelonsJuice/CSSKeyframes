@@ -159,7 +159,7 @@ const AnimationEditor = () => {
               callback={(value, index) =>
                 editAnimationParameter("fillMode", value)
               }
-              direction="bottom"
+              origin="bottom"
             />
           </span>
         </div>
@@ -178,7 +178,7 @@ const AnimationEditor = () => {
               callback={(value, index) =>
                 editAnimationParameter("direction", value)
               }
-              direction="bottom"
+              origin="bottom"
             />
           </span>
         </div>

@@ -56,7 +56,7 @@ const createPropCSS = (group, type, unit, range, frames, animeIndex) => {
   });
   let currentUnit = unit && unit === "multiple" ? "px" : unit;
 
-  // group prop: properties that share the same animation
+  // group prop: multiple option prop (one animation for all)
   // example: transform: (translate, scale, ecc...)
   return group
     ? {
@@ -81,7 +81,7 @@ const createPropCSS = (group, type, unit, range, frames, animeIndex) => {
 
 const initState = {
   animationName: "anime",
-  changes: true,
+  changes: false,
   frame: 0,
   propCSSGroup: "transform",
   propCSS: "translateY",
@@ -133,7 +133,6 @@ const reducer = (state, action) => {
       let { name, group, type, unit, range, index } = action.payload;
       copy.propCSSCounter += 1;
 
-      // create css prop group (one animation for alll props of the group)
       if (group) {
         copy.propsCSSList.hasOwnProperty(group)
           ? // create group if not exist
@@ -244,7 +243,6 @@ const reducer = (state, action) => {
       // split curve and update animations frames
       let t = solveTatX(cp.clt, cp.crt, x);
       let split = splitCurveAtT(t, cp.clt, cp.crt);
-      console.log(t);
 
       anime.frames.splice(frameIndex, 0, roundFloat(pos));
       anime.timing.splice(frameIndex, 0, roundCoordX(split.rtHalf));
@@ -253,7 +251,6 @@ const reducer = (state, action) => {
       // update properties
       let keys = Object.keys(props);
       for (let key of keys) {
-        // skip cycle if animation is not equal
         if (props[key].animationIndex !== animeIndex) continue;
         let p = props[key].father ? Object.keys(props[key].children) : [key];
         let i = frameIndex;
@@ -368,7 +365,6 @@ const reducer = (state, action) => {
       let newAnimeIndex = 0;
       let keys = Object.keys(copyProps);
 
-      // set new animtion for the props
       let counter = 0;
       const frames = copyAnime[0].frames;
       for (let key of keys) {
@@ -467,7 +463,6 @@ const reducer = (state, action) => {
         anime.name = anime.name.replace(state.animationName, name);
       return {
         ...state,
-        changes: true,
         animationName: name,
         animations: copyAnime,
       };

@@ -27,7 +27,7 @@ const PropsCSSList = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <section className="props-css-list">

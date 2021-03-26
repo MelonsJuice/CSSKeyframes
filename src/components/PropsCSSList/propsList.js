@@ -16,13 +16,13 @@ export const propsList = {
     },
     {
       name: "scaleX",
-      range: [0, null],
+      range: [null, null],
       type: "number",
       group: "transform",
     },
     {
       name: "scaleY",
-      range: [0, null],
+      range: [null, null],
       type: "number",
       group: "transform",
     },
@@ -179,11 +179,17 @@ export const propsList = {
 
   Text: [
     { name: "font-size", range: [0, null], type: "number", unit: "multiple" },
-    { name: "font-color", type: "color" },
+    { name: "color", type: "color" },
     { name: "font-weight", range: [0, null], type: "number" },
-    { name: "font-stretch", range: [0, null], type: "number" },
+    { name: "font-stretch", range: [0, null], type: "number", unit: "%" },
     {
       name: "letter-spacing",
+      range: [0, null],
+      type: "number",
+      unit: "multiple",
+    },
+    {
+      name: "text-indent",
       range: [0, null],
       type: "number",
       unit: "multiple",

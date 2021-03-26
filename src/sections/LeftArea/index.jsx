@@ -5,20 +5,10 @@ import TimingEditor from "../../components/TimingEditor";
 
 const LeftArea = () => {
   return (
-    <div className="flex-row" style={{ width: "max-content" }}>
+    <div className="flex-row left-area">
       <PropsCSSList />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateRows:
-            "calc(100vh - var(--timing-editor-height) - 3.2em) max-content",
-          height: "100vh",
-          paddingBottom: "3.2em",
-        }}
-      >
-        <div style={{ padding: "3.2em 0" }}>
-          <PropsCSSEditor />
-        </div>
+      <div className="prop-timing-container">
+        <PropsCSSEditor />
         <TimingEditor />
       </div>
     </div>

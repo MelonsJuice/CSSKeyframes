@@ -45,3 +45,12 @@
   box-shadow: var(--shadow);
   transition: 0.2s ease;
 }
+
+/*****************/
+/* MEDIA QUERIES */
+/*****************/
+@media screen and (max-width: 1024px) {
+  .timing-editor {
+    height: auto;
+  }
+}
