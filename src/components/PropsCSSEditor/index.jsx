@@ -188,7 +188,7 @@ const PropsCSSEditor = () => {
                   alignItems: "center",
                 }}
               >
-                <h4>Frame {index + 1}</h4>
+                <h4>KeyFrame {index + 1}</h4>
                 {type === "number" ? (
                   <div style={{ fontWeight: "700" }}>
                     <input

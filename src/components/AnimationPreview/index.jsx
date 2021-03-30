@@ -315,7 +315,7 @@ const AnimationPreview = () => {
           <div className="flex-row space-big-double-row">
             <img
               src={"/imgs/logo_" + (darkMode ? "light" : "dark") + ".png"}
-              style={{ height: "2.8em" }}
+              style={{ height: "4.8em" }}
             ></img>
           </div>
           <div
@@ -373,7 +373,8 @@ const AnimationPreview = () => {
               >
                 <h5>Docs/Repo</h5>
                 <a
-                  href="#"
+                  href="https://github.com/MelonsJuice/KeyFramess"
+                  target="_blank"
                   className="max-button"
                   style={{ color: "white", height: "max-content" }}
                 >
@@ -385,7 +386,9 @@ const AnimationPreview = () => {
                 style={{ flexDirection: "column", alignItems: "baseline" }}
               >
                 <h5>made by</h5>
-                <h6>MelonsJuice</h6>
+                <a href="https://github.com/MelonsJuice" target="_blank">
+                  <h6>MelonsJuice</h6>
+                </a>
               </div>
             </div>
           </div>
