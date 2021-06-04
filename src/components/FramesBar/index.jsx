@@ -15,7 +15,7 @@ const FramesBar = () => {
   const { animations, animationIndex, dispatch } = useContext(AppContext);
   const canvasRef = useRef(null);
   const previewRef = useRef(null);
-  const [mod, setMod] = useState("edit");
+  const [mode, setMode] = useState("edit");
   const buttons = useRef([]);
 
   var canvas, frame, offset, range, scale;
@@ -30,7 +30,7 @@ const FramesBar = () => {
       dispatch({ type: SET_FRAME, payload: frame });
 
     // switch different operation
-    switch (mod) {
+    switch (mode) {
       case "edit":
         if (!valid) return; // return if no valid frame has been selected
 
@@ -94,7 +94,7 @@ const FramesBar = () => {
   const handlePreviewFrame = (e) => {
     canvas = canvasRef.current.getBoundingClientRect();
     previewRef.current.style.transform = "translate(-50%, -0.36em) scale(1)";
-    mod === "add" && window.addEventListener("mousemove", movePreviewFrame);
+    mode === "add" && window.addEventListener("mousemove", movePreviewFrame);
   };
 
   const removeHandlePreviewFrame = () => {
@@ -115,7 +115,7 @@ const FramesBar = () => {
     let toTurnOff = e.target === btns[0] ? 1 : 0;
     btns[toTurnOff].checked = false;
 
-    setMod(
+    setMode(
       !(btns[0].checked || btns[1].checked)
         ? "edit"
         : btns[0].checked
@@ -143,7 +143,7 @@ const FramesBar = () => {
             ref={previewRef}
             className="frames-bar-frame-container"
             style={{
-              display: mod === "add" ? "block" : "none",
+              display: mode === "add" ? "block" : "none",
               opacity: "0.8",
               transition: "transform 0.2s cubic-bezier(0.06, 0.55, 0, 1)",
             }}
@@ -192,7 +192,7 @@ const FramesBar = () => {
               key={button[0]}
               className={
                 "flex-center space-mid-row app-button" +
-                (mod === button[0] ? "-pressed" : "")
+                (mode === button[0] ? "-pressed" : "")
               }
               style={{
                 position: "relative",
@@ -205,7 +205,7 @@ const FramesBar = () => {
                 className="pop-up-background"
                 style={{
                   borderRadius: "0.8em",
-                  transform: "scale(" + (mod === button[0] ? "1" : "0") + ")",
+                  transform: "scale(" + (mode === button[0] ? "1" : "0") + ")",
                 }}
               ></div>
               <FontAwesomeIcon icon={button[1]} />

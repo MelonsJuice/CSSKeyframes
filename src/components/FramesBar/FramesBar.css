@@ -24,7 +24,7 @@
   user-select: none;
   border-radius: 0.8em;
   color: var(--color-purple);
-  background: #fff;
+  background: var(--color-white-c);
   box-shadow: 0 0 0.8em var(--color-purple);
   cursor: pointer;
 }

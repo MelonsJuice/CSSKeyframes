@@ -78,7 +78,7 @@ const AnimationClassPanel = ({ classSheet, onNameChange }) => {
               padding: "0 0.2em",
               fontSize: "1.2em",
               width: "100%",
-              background: "#410dff12",
+              background: "var(--color-purple-transparent-c)",
             }}
             onChange={() => {}}
           />

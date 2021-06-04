@@ -8,8 +8,10 @@
   --color-bg: #f4f0ff;
   --color-purple: #420dff;
   --color-purple-transparent: #410dff33;
+  --color-purple-transparent-c: #410dff12;
   --color-violet: #a60dff;
   --color-white: #fff;
+  --color-white-c: #fff;
 
   --shadow: 0.24em 0.24em 0.48em var(--color-purple-transparent),
     -0.24em -0.24em 0.48em var(--color-white);

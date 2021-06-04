@@ -61,7 +61,7 @@
   outline: none;
   border: none;
   border-radius: 0.4em;
-  background: #410dff12;
+  background: var(--color-purple-transparent-c);
   resize: none;
   color: var(--font-color);
   font-size: 0.88em;

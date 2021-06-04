@@ -312,14 +312,12 @@ const AnimationPreview = () => {
     <section className="animation-preview flex-center">
       <nav className="flex-row animation-preview-nav">
         <div className="flex-row">
-          <div className="flex-row space-big-double-row">
-            <img
-              src={"/imgs/logo_" + (darkMode ? "light" : "dark") + ".png"}
-              style={{ height: "4.8em" }}
-            ></img>
+          <div className="flex-row space-big-row" style={{ fontWeight: "800" }}>
+            <span style={{ color: "var(--color-purple)" }}>CSS</span>
+            &nbsp;KeyFrames
           </div>
           <div
-            className="flex-center space-big-double-row"
+            className="flex-center space-big-row"
             style={{ position: "relative" }}
           >
             <button
@@ -373,7 +371,7 @@ const AnimationPreview = () => {
               >
                 <h5>Docs/Repo</h5>
                 <a
-                  href="https://github.com/MelonsJuice/KeyFramess"
+                  href="https://github.com/MelonsJuice/CSSKeyframes"
                   target="_blank"
                   className="max-button"
                   style={{ color: "white", height: "max-content" }}
