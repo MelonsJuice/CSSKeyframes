@@ -1,4 +1,4 @@
-<img src="./icons-imgs/LogoDummy.png" />
+<img src="./iconsImgs/LogoDummy.png" />
 <br/>
 <br/>
 
@@ -27,7 +27,7 @@
 `INSERT`:
 go to **PROPERTIES LIST** and click on the property you want to add
 
-`REMOVE`: go to **CURRENT PROPERTIES** and click the <img src="./icons-imgs/minus.png"/> icon in the property you want to remove
+`REMOVE`: go to **CURRENT PROPERTIES** and click the <img src="./iconsImgs/Minus.png"/> icon in the property you want to remove
 
 #### `PROPERTIES TYPE`:
 
@@ -39,7 +39,7 @@ Properties have been divided into 2 types:
 
 <table>
 <tr><td>
-  :information_source: <b>NOTE:</b> Grouped properties are preceded by the <img src="./icons-imgs/group.png"/> icon and are placed in the "<span style="font-style: italic;">CURRENT PROPERTIES</span>" under the group to which they belong (the name is highlighted in purple)
+  :information_source: <b>NOTE:</b> Grouped properties are preceded by the <img src="./iconsImgs/Group.png"/> icon and are placed in the "<span style="font-style: italic;">CURRENT PROPERTIES</span>" under the group to which they belong (the name is highlighted in purple)
 </td></tr>
 </table>
 
@@ -59,7 +59,7 @@ Properties have been divided into 2 types:
 
 ## **Edit a property**
 
-Go to **CURRENT PROPERTIES** and click the <img src="./icons-imgs/edit.png"/> icon in the property you want to edit
+Go to **CURRENT PROPERTIES** and click the <img src="./iconsImgs/Edit.png"/> icon in the property you want to edit
 
 <table>
 <tr><td>
@@ -120,7 +120,7 @@ Go to **CURRENT PROPERTIES** and click the <img src="./icons-imgs/edit.png"/> ic
 
 ## **Add or remove a keyframe**
 
-`ADD`: click the button <img src="./icons-imgs/plus.png" /> (next to the purple bar) for enter in add mode (the button will be filled with purple), next go to the keyframes bar and click on the point where you want to insert the frame (a preview will show you the position of the new keyframe)
+`ADD`: click the button <img src="./iconsImgs/Plus.png" /> (next to the purple bar) for enter in add mode (the button will be filled with purple), next go to the keyframes bar and click on the point where you want to insert the frame (a preview will show you the position of the new keyframe)
 
 <table>
 <tr><td>
@@ -130,7 +130,7 @@ Go to **CURRENT PROPERTIES** and click the <img src="./icons-imgs/edit.png"/> ic
 
 <br/>
 
-`REMOVE`: click the button <img src="./icons-imgs/minus.png" /> (next to the purple bar) for enter in remove mode (the button will be filled with purple), next go to the keyframes bar and click the keyframe you want to remove
+`REMOVE`: click the button <img src="./iconsImgs/Minus.png" /> (next to the purple bar) for enter in remove mode (the button will be filled with purple), next go to the keyframes bar and click the keyframe you want to remove
 
 <table>
 <tr><td>
@@ -180,9 +180,9 @@ Select the first of the 2 keyframes of which you want to modify the timing funct
 Next to the keyframes bar there are several input and drop menus that will allow you to change the properties of the current animation.  
 Of these properties, repeat and delay have one more option:
 
-- <img src="./icons-imgs/infinity.png" /> for repeat, allows you to select either a number or infinity
+- <img src="./iconsImgs/Infinity.png" /> for repeat, allows you to select either a number or infinity
 
-- <img src="./icons-imgs/repeat.png" /> for delay, allows you to repeat the delay between one iteration and another
+- <img src="./iconsImgs/Repeat.png" /> for delay, allows you to repeat the delay between one iteration and another
 
 <table>
 <tr><td>
@@ -211,9 +211,9 @@ Of these properties, repeat and delay have one more option:
 
 <br />
 
-`CREATE`: go to the animation drop menu and click the <img src="./icons-imgs/plus.png" /> icon on the left
+`CREATE`: go to the animation drop menu and click the <img src="./iconsImgs/Plus.png" /> icon on the left
 
-`DELETE`: go to the animation drop menu and click the <img src="./icons-imgs/minus.png" /> icon on the left
+`DELETE`: go to the animation drop menu and click the <img src="./iconsImgs/Minus.png" /> icon on the left
 
 <table>
 <tr><td>
@@ -231,9 +231,9 @@ Of these properties, repeat and delay have one more option:
 
 ## **Play, restart and update animations**
 
-`PLAY / PAUSE`: click the <img src="./icons-imgs/play.png" /> icon (on the top right) to play or pause the animations
+`PLAY / PAUSE`: click the <img src="./iconsImgs/Play.png" /> icon (on the top right) to play or pause the animations
 
-`RESTART`: click the <img src="./icons-imgs/restart.png" /> icon (always on the top rigth) to restart the animations
+`RESTART`: click the <img src="./iconsImgs/Restart.png" /> icon (always on the top rigth) to restart the animations
 
 <table>
 <tr><td>
